@@ -53,15 +53,13 @@ mongodb.connect('mongodb://localhost:27017/roots', function(error, database)
     }
 
     db.users = database.collection('users');
-    db.cards = database.collection('cards');
     db.login = database.collection('login');
-    db.properties = database.collection('properties');
 
     console.log("Connected to database");
 
     process.on('SIGTERM', function()
     {
-        console.log("Shutting Beacon Lane server on port " + PORT +" down.");
+        console.log("Shutting Roots server on port " + PORT + " down.");
         database.close();
         app.close();
     });

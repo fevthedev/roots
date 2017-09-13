@@ -1,3 +1,32 @@
 body {
-    background-color: #ececec;
+    background-color: #ffffff;
 }
+
+#header {
+    background-color: #ffffff;
+}
+
+#headerProfilePhoto {
+    border: 2px solid #81e5bc;
+}
+
+#mainFeed {
+    background-color: #abefd4;
+}
+
+#sideBar {
+    background-color: #abefd4;
+}
+
+#feedList {
+    background-color: #ffffff;
+}
+
+.feedItem {
+    border: 2px solid #81e5bc;
+}
+
+/* 
+-darkest: #81e5bc
+-middle: #86e6bf
+-lightest: #abefd4 */

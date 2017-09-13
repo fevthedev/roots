@@ -26,6 +26,10 @@ body {
     border: 2px solid #81e5bc;
 }
 
+.updateTimeStamp {
+    font-size: 70%;
+}
+
 /* 
 -darkest: #81e5bc
 -middle: #86e6bf

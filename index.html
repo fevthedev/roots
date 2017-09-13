@@ -15,18 +15,28 @@
                 <div class="col py-3 mb-3" id="header">
 
                     <div class="row align-items-center">
-                        <div class="col-4 col-sm-2">
-                            <img src="resources/images/logo.png" alt="roots logo" class="img-fluid" >
-                        </div>
-                        <div class="col-5 col-sm-2">
-                            <h3>Roots</h3>
+                        
+                        <div class="col-10 col-sm-4">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-5">
+                                    <img src="resources/images/logo.png" alt="roots logo" class="img-fluid" >
+                                </div>
+                                
+                                <div class="col-9 col-sm-7">
+                                    <h3>Roots</h3>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="hidden-xs-down col-sm-7 text-right">
-                            <h3>Christopher</h3>
-                        </div>
-                        <div class="col-1 col-sm-1 text-right">
-                            <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid" id="headerProfilePhoto">
+                        <div class="col-1 col-sm-8">
+                            <div class="row align-items-center">
+                                <div class="hidden-xs-down col-sm-10 text-right">
+                                    <h3>Christopher</h3>
+                                </div>
+                                <div class="col-12 col-sm-2 text-right">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid" id="headerProfilePhoto">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -34,10 +44,12 @@
 
             <div class="row">
                 <div class="col-12 col-sm-8 py-3" id="mainFeed">
-                    <h4 class="text-center">Latest updates</h4>
+                    <h4 class="d-inline">Latest updates</h4>
+                    <span class="float-right updateTimeStamp">Updated: 5 minutes ago</span>
                     
                     <div class="col p-3" id="feedList">
-                        <div class="col feedItem">
+                        
+                        <div class="col feedItem mb-3">
                             <div class="row align-items-center">
                                 <div class="col-2 col-sm-2 py-3">
                                     <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
@@ -48,11 +60,54 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col feedItem mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-2 py-3">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
+                                </div>
+                                <div class="col-8">
+                                    <h4 class="feedName">Mark Podrouzek</h4>
+                                    <p class="feedStatus">this is a proud status!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col feedItem mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-2 py-3">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
+                                </div>
+                                <div class="col-8">
+                                    <h4 class="feedName">Jonathan MacKenzie</h4>
+                                    <p class="feedStatus">this is a proud status!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col feedItem mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-2 py-3">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
+                                </div>
+                                <div class="col-8">
+                                    <h4 class="feedName">Bradley Baker</h4>
+                                    <p class="feedStatus">this is a proud status!</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="hidden-xs-down col-sm-3 offset-sm-1 py-3" id="sideBar">
-                        
+                        <div class="btn-group-vertical btn-block">
+                            <button type="button" class="btn btn-secondary btn-lg">Friends</button>
+                            <button type="button" class="btn btn-secondary btn-lg">Groups</button>
+                            <button type="button" class="btn btn-secondary btn-lg">Photos</button>
+                            <button type="button" class="btn btn-secondary btn-lg">Events</button>
+                            <button type="button" class="btn btn-secondary btn-lg">Chat</button>
+                            <button type="button" class="btn btn-secondary btn-lg">Settings</button>
+                        </div>
                 </div>
             </div>
 

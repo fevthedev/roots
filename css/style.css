@@ -20,6 +20,8 @@ body {
 
 #feedList {
     background-color: #ffffff;
+    height: 500px;
+    overflow-y: scroll;
 }
 
 .feedItem {

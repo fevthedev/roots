@@ -2,7 +2,7 @@
 
 var as     = require('async');
 var bcrypt = require('bcryptjs');
-var tools  = require('./tools.js');
+//var tools  = require('./tools.js');
 
 module.exports = function(app, db)
 {

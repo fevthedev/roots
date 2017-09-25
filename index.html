@@ -168,7 +168,7 @@
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" name="submitSignupBtn" id="submitSignupBtn">Continue</button>
+                <button type="button" class="btn btn-success" name="submitSignupBtn" id="submitSignupBtn" onclick="userRegistration();">Continue</button>
                 </div>
             </div>
             </div>
@@ -239,6 +239,57 @@
 				}
 			});
 		}
+		
+		
+	}
+	
+	
+	function userRegistration() {
+		
+		var firstName = $("#userFirstName").val();
+		var lastName = $("#userLastName").val();
+		var email = $("#userEmail").val();
+		var password = $("#userPassword").val();
+		var confirmPass = $("#userPasswordConfirm").val();
+		
+		if (firstName.trim() === "") {
+			alert("Please enter your first name.");
+			$("#userFirstName").focus();
+			$("#")
+			return false;
+		} else if (lastName.trim() == "") {
+			alert("Please enter your last name.");
+			$("#userLastName").focus();
+			return false;
+		} else if (!validateEmail(email)) {
+			alert("Please enter a valid email address.");
+			$("#userEmail").focus();
+			return false;
+		} else if (password.trim() == "") {
+			alert("Please enter a valid password. Your password should not consist of only spaces.");
+			$("#userPassword").focus();
+			return false;
+		} else if (password.trim() !== confirmPass.trim()) {
+			alert("Passwords do not match. Please check and try again.");
+			$("#userPassword").focus();
+			return false;
+		}
+		
+		var formData = $("#signupForm").serialize();
+		
+		$.ajax({
+			method: "post",
+			url: "ajax/...",
+			dataType: JSON,
+			data: formData,
+			success: function(response) {
+				if (response) {
+					var obj = JSON.parse(response);
+					/* blah blah blah */
+				}
+			}
+		
+		});
 		
 		
 	}

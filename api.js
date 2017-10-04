@@ -8,6 +8,7 @@ module.exports = function(app, db)
     app.post('hook', function(req, res)
     {
         require('child_process').spawn('git', ['pull']);
+        console.log("\n\n\nWEBHOOK RECEIVED\n\n\n");
         return res.status(200).send("thanks!");
     });
 

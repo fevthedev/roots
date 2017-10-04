@@ -7,7 +7,7 @@ module.exports = function(app, db)
 {
     app.get('/', function(req, res)
     {
-        // do stuff
+        res.sendfile("index.html");
     });
 };
 

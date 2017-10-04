@@ -5,14 +5,14 @@ var as     = require('async');
 
 module.exports = function(app, db)
 {
-    app.post('hook', function(req, res)
+    app.post('/hook', function(req, res)
     {
-        require('child_process').spawn('git', ['pull']);
         console.log("\n\n\nWEBHOOK RECEIVED\n\n\n");
+        require('child_process').spawn('git', ['pull']);
         return res.status(200).send("thanks!");
     });
 
-    app.post('ajax/login', function(req, res)
+    app.post('/ajax/login', function(req, res)
     {
         db.login.findOne({email : req.body.usrEmail}, function(err, user)
         {
@@ -24,13 +24,13 @@ module.exports = function(app, db)
         });
     });
 
-    app.get('ajax/logout', function(req, res)
+    app.get('/ajax/logout', function(req, res)
     {
         req.session.reset(); // log the user out by resetting the session
         res.redirect('/');   // redirect to /
     });
 
-    app.post('ajax/create-user', function(req, res)
+    app.post('/ajax/create-user', function(req, res)
     {
         // parse the data from the request body
         var userData = req.body;

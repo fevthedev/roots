@@ -1,7 +1,6 @@
 //api.js
 
 var as     = require('async');
-var bcrypt = require('bcryptjs');
 //var tools  = require('./tools.js');
 
 module.exports = function(app, db)
@@ -13,22 +12,8 @@ module.exports = function(app, db)
             if(err) return res.status(200).send("Error: " + err);
 
             // If we cant find a user with that email address...
-            if(!user) return res.status(200).send("Invalid email or password");
-            else
-            {
-                // check the password
-                bcrypt.compare(req.body.usrPass, user.passwordHash, function(err, match)
-                {
-                    if(err) return res.status(500).send("Error: " + err);
-
-                    if(match)
-                    {
-                        req.session.user = user;
-                        return res.status(200).send("SUCCESS");
-                    }
-                    else return res.status(200).send("Invalid email or password");
-                });
-            }
+            if(!user || user.password != usrPass) return res.status(200).send("Invalid email or password");
+            else return res.status(200).send("SUCCESS");
         });
     });
 
@@ -59,14 +44,10 @@ module.exports = function(app, db)
             },
             function(callback)
             {
-                // hash the password
-                bcrypt.hash(userData.usrPass, 1, function(err, hash)
+                // add email/ password combination into login collection in db
+                db.login.insert({email : userData.email, password: userData.usrPass}, function(err, result)
                 {
-                    // add email/ password hash combination into login collection in db
-                    db.login.insert({email : userData.email, passwordHash: hash}, function(err, result)
-                    {
-                        if(err) callback(err);
-                    });
+                    if(err) callback(err);
                 });
 
                 // remove password from user object, we don't want to store it anywhere

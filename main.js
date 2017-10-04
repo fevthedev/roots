@@ -4,8 +4,6 @@ const PORT = require('./config.js').portnumber;
 
 // ### SETUP
 
-// bcrypt is only required in routes.js (for now at least)
-// var bcrypt     = require('bcryptjs');
 var express    = require('express');         // HTTP/ routing/ web server
 var mongodb    = require('mongodb');         // NoSQL database (JSON-like)
 var bodyParser = require('body-parser');     // for parsing data from client

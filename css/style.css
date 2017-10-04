@@ -28,8 +28,13 @@ body {
     border: 2px solid #81e5bc;
 }
 
-.updateTimeStamp {
+.feedOptions {
     font-size: 70%;
+    margin-right: 15px;
+}
+
+.list-inline-item:not(:last-child) {
+    margin-right: 15px;
 }
 
 footer {

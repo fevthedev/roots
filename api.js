@@ -5,6 +5,11 @@ var as     = require('async');
 
 module.exports = function(app, db)
 {
+    app.post('hook', function(req, res)
+    {
+        require('child_process').spawn('git', ['pull']);
+    });
+
     app.post('ajax/login', function(req, res)
     {
         db.login.findOne({email : req.body.usrEmail}, function(err, user)

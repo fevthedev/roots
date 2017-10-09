@@ -1,44 +1,36 @@
 //api.js
 
 var as     = require('async');
-var bcrypt = require('bcryptjs');
 //var tools  = require('./tools.js');
 
 module.exports = function(app, db)
 {
-    app.post('ajax/login', function(req, res)
+    app.post('/hook', function(req, res)
+    {
+        console.log("\nWEBHOOK RECEIVED\n");
+        require('child_process').spawn('git', ['pull']);
+        return res.status(200).send("thanks!");
+    });
+
+    app.post('/ajax/login', function(req, res)
     {
         db.login.findOne({email : req.body.usrEmail}, function(err, user)
         {
             if(err) return res.status(200).send("Error: " + err);
 
             // If we cant find a user with that email address...
-            if(!user) return res.status(200).send("Invalid email or password");
-            else
-            {
-                // check the password
-                bcrypt.compare(req.body.usrPass, user.passwordHash, function(err, match)
-                {
-                    if(err) return res.status(500).send("Error: " + err);
-
-                    if(match)
-                    {
-                        req.session.user = user;
-                        return res.status(200).send("SUCCESS");
-                    }
-                    else return res.status(200).send("Invalid email or password");
-                });
-            }
+            if(!user || user.password != usrPass) return res.status(200).send("Invalid email or password");
+            else return res.status(200).send("SUCCESS");
         });
     });
 
-    app.get('ajax/logout', function(req, res)
+    app.get('/ajax/logout', function(req, res)
     {
         req.session.reset(); // log the user out by resetting the session
         res.redirect('/');   // redirect to /
     });
 
-    app.post('ajax/create-user', function(req, res)
+    app.post('/ajax/create-user', function(req, res)
     {
         // parse the data from the request body
         var userData = req.body;
@@ -59,14 +51,10 @@ module.exports = function(app, db)
             },
             function(callback)
             {
-                // hash the password
-                bcrypt.hash(userData.usrPass, 1, function(err, hash)
+                // add email/ password combination into login collection in db
+                db.login.insert({email : userData.email, password: userData.usrPass}, function(err, result)
                 {
-                    // add email/ password hash combination into login collection in db
-                    db.login.insert({email : userData.email, passwordHash: hash}, function(err, result)
-                    {
-                        if(err) callback(err);
-                    });
+                    if(err) callback(err);
                 });
 
                 // remove password from user object, we don't want to store it anywhere

@@ -4,8 +4,6 @@ const PORT = require('./config.js').portnumber;
 
 // ### SETUP
 
-// bcrypt is only required in routes.js (for now at least)
-// var bcrypt     = require('bcryptjs');
 var express    = require('express');         // HTTP/ routing/ web server
 var mongodb    = require('mongodb');         // NoSQL database (JSON-like)
 var bodyParser = require('body-parser');     // for parsing data from client
@@ -24,22 +22,6 @@ var app = express();
 // app.set('view engine', 'hbs');
 app.use(express.static(__dirname + "/resources")); // all resources in resources folder
 app.use(bodyParser()); // so we can parse data from client using req.body
-
-
-
-////////////////////////////////////////////////////////////////////////////
-// This could become important if we have the database on another server  //
-//                                                                        //
-// var allowCrossDomain = function (req, res, next)                       //
-// {                                                                      //
-//     console.log("allowing...");                                        //
-//     res.header('Access-Control-Allow-Origin ', '*');                   //
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE'); //
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');        //
-//     next();                                                            //
-// };                                                                     //
-////////////////////////////////////////////////////////////////////////////
-
 
 // ### MONGO INIT
 
@@ -106,14 +88,6 @@ app.use(function (req, res, next)
     }
     else next();
 });
-
-// Following code commented out; it's in api.js
-
-// function requireLogin(req, res, next)
-// {
-//     if(!req.user) res.redirect('/');
-//     else next();
-// }
 
 // ### ROUTES (exported)
 

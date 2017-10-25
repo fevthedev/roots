@@ -24,8 +24,19 @@ body {
     overflow-y: scroll;
 }
 
+.feedStatus {
+    font-size: 0.9em;
+}
+
 .feedItem {
-    border: 2px solid #81e5bc;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.feedItem p, .feedItem ul {
+    margin-bottom: 0;
 }
 
 .feedOptions {
@@ -45,7 +56,66 @@ button:hover {
     cursor: pointer;
 }
 
-/* 
--darkest: #81e5bc
--middle: #86e6bf
--lightest: #abefd4 */
+#profileNameDisplay {
+    font-size: 1em;
+    letter-spacing: 2px;
+}
+
+#profileStatusDisplay {
+    text-transform: capitalize;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+ul#profileTabs {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul#profileTabs li:first-child {
+    background-color: #81e5bc;
+    color: #ffffff;
+}
+
+ul#profileTabs li {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #81e5bc;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+}
+
+#profileContent ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#profileContent {
+    border: 2px solid #81e5bc;
+    min-height: 300px;
+}
+
+#profileContent .eventNameContent {
+    width: 70%;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+#profileContent .eventInterestNotice {
+    width: 100%;
+    font-size: 0.9em;
+}
+
+#profileContent .eventListItem {
+    border: 2px solid #ccc;
+}
+
+#profileContent .interestCount {
+    font-size: 0.9em;
+}
+
+#profileContent #galleryList li {
+    padding: 0;
+    margin: 0;
+}

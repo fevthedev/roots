@@ -1,0 +1,67 @@
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Root Connections</title>
+    <script src="https://use.fontawesome.com/b1dff41402.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="resources/css/style.css" />
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="/scripts/home.js"></script>
+
+    <script>
+        $(function() {
+            $("#header").load("includes/header.html");
+            $("#footer").load("includes/footer.html");
+        })
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col py-3 mb-3" id="header">
+
+            <div class="row align-items-center">
+
+                <div class="col-10 col-sm-4">
+                    <div class="row align-items-center">
+                        <div class="col-2 col-sm-5">
+                            <img src="resources/images/logo.png" alt="roots logo" class="img-fluid">
+                        </div>
+
+                        <div class="col-9 col-sm-7">
+                            <h3>Roots</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-1 col-sm-8">
+                    <div class="row align-items-center justify-content-end">
+                        <div class="col-xs-auto mx-sm-1">
+                            <!-- trigger signup modal -->
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal">
+                                Login
+                            </button>
+                        </div>
+                        <div class="col-xs-auto mx-sm-1">
+                            <!-- trigger signup modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal">
+                                Sign Up
+                            </button>
+                        </div>
+                        <!-- <div class="hidden-xs-down col-sm-10 text-right">
+                            <h3>Christopher</h3>
+                        </div>
+                        <div class="col-12 col-sm-2 text-right">
+                            <img src="/images/icon.png" alt="user profile photo" class="img-fluid" id="headerProfilePhoto">
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,3 +1,18 @@
+$(function() {
+
+    $(".feedItem").click(function(){
+
+        location.assign("templates/profile.html");
+
+    });
+
+    $("#siteLogo").click(function(){
+
+        location.assign("/index.html");
+
+    });
+});
+
 function userLogin(){
     
     var email = $("#userLoginEmail").val();
@@ -116,4 +131,56 @@ function validateEmail(email) {
     } else {
         return false;
     }
+}
+
+function showActivity(label) {
+
+    $(".tabLabel").css({
+        "background-color": "#ffffff",
+        "color": "#000000"
+    });
+
+    $(label).css({
+        "background-color": "#81e5bc",
+        "color": "#ffffff"
+    });
+
+
+    $(".contentItem").fadeOut("slow").attr("hidden", true);
+    $("#profileActivityContent").fadeIn("slow").attr("hidden", false);
+
+}
+
+function showGallery(label) {
+
+    $(".tabLabel").css({
+        "background-color": "#ffffff",
+        "color": "#000000"
+    });
+
+    $(label).css({
+        "background-color": "#81e5bc",
+        "color": "#ffffff"
+    });
+
+    $(".contentItem").fadeOut("slow").attr("hidden", true);
+    $("#profilePhotosContent").fadeIn("slow").attr("hidden", false);
+
+}
+
+function showEvents(label) {
+
+    $(".tabLabel").css({
+        "background-color": "#ffffff",
+        "color": "#000000"
+    });
+
+    $(label).css({
+        "background-color": "#81e5bc",
+        "color": "#ffffff"
+    });
+
+    $(".contentItem").fadeOut("slow").attr("hidden", true);
+    $("#profileEventContent").attr("hidden", false).fadeIn("slow");
+
 }

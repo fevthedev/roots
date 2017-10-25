@@ -2,13 +2,13 @@ $(function() {
 
     $(".feedItem").click(function(){
 
-        location.assign("templates/profile.html");
+        //location.assign("templates/profile.html");
 
     });
 
     $("#siteLogo").click(function(){
 
-        location.assign("/index.html");
+        //location.assign("/index.html");
 
     });
 });

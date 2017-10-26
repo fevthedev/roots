@@ -11,6 +11,23 @@ $(function() {
         //location.assign("/index.html");
 
     });
+
+    $(".interestedBtn").click(function(){
+
+        if ($(this).hasClass("interested")) {
+
+            $(this).removeClass("interested");
+            $("img",this).attr("src", "resources/images/unselectedgold.png");
+
+        } else {
+
+            $(this).addClass("interested");
+            $("img",this).attr("src", "resources/images/interestedgold.png");
+
+        }
+
+
+    });
 });
 
 function userLogin(){

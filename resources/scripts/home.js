@@ -31,7 +31,9 @@ $(function() {
 });
 
 function userLogin(){
-    
+
+    goHome();
+    return true;
     var email = $("#userLoginEmail").val();
     var password = $("#userLoginPassword").val();
     
@@ -77,6 +79,9 @@ function userLogin(){
 }
 
 function userRegistration() {
+
+    showSuccessPrompt();
+    return true;
     
     var fullName = $("#userFullName").val();
     var userName = $("#userName").val();
@@ -139,8 +144,6 @@ function userRegistration() {
         }
     
     });
-    
-    
 }
 
 function validateEmail(email) {
@@ -201,4 +204,39 @@ function showEvents(label) {
     $(".contentItem").fadeOut("slow").attr("hidden", true);
     $("#profileEventContent").attr("hidden", false).fadeIn("slow");
 
+}
+
+function showMessages(label) {
+
+    $(".tabLabel").css({
+        "background-color": "#ffffff",
+        "color": "#000000"
+    });
+
+    $(label).css({
+        "background-color": "#81e5bc",
+        "color": "#ffffff"
+    });
+
+    $(".contentItem").fadeOut("slow").attr("hidden", true);
+    $("#profileMailContent").attr("hidden", false).fadeIn("slow");
+
+}
+
+function goHome() {
+    location.assign("index.html");
+}
+
+function goOffline() {
+    location.assign("login.html");
+}
+
+function showSuccessPrompt() {
+
+    $("#signupForm").fadeOut("slow", function() {
+
+        $("#signupModal .modal-footer").attr("hidden",true);
+        $("#successPrompt").attr("hidden", false).fadeIn("slow");
+
+    });
 }

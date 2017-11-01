@@ -1,5 +1,6 @@
 body {
     background-color: #ffffff;
+    font-size: 1.2em;
 }
 
 #header {
@@ -31,8 +32,6 @@ body {
 .feedItem {
     cursor: pointer;
     border: 2px solid #ccc;
-    padding-top: 15px;
-    padding-bottom: 15px;
 }
 
 .feedItem p, .feedItem ul {

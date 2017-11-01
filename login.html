@@ -32,7 +32,7 @@
             transition: 1s opacity;
         }
 
-        #userOptionWindow {
+        .userOptionWindow {
             background-color: rgba(0,0,0,0.8);
             border-radius: 15px;
             border: 1px solid #81e5bc;
@@ -45,9 +45,31 @@
             transform: translate(-50%, -50%);
         }
 
+        #offlineFeed {
+            color: white;
+        }
+
+        #offlineFeedItemContainer {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        #offlineOptions {
+            max-height: 350px;
+        }
+
         #disclaimerText {
             color: #81e5bc;
         }
+
+        #signupSuccessLabel {
+
+        }
+
+        #signupFeedbackLabel {
+
+        }
+
     </style>
 </head>
 <body>
@@ -61,7 +83,90 @@
 
     <div class="row justify-content-center" id="userOptionsSection">
 
-        <div class="col-12 col-sm-7 col-md-5 py-4" id="userOptionWindow">
+        <div class="col-12 col-sm-7 py-4 mr-3 userOptionWindow" id="offlineFeed">
+
+
+            <div class="row">
+                <div class="col-12">
+
+                    <h3 class="my-3">What's happening</h3>
+
+                    <div id="offlineFeedItemContainer">
+                        <div class="col feedItem mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-2 py-3">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
+                                </div>
+                                <div class="col-8">
+                                    <h4 class="feedName">Christopher Fevrier</h4>
+                                    <p class="feedStatus">One interesting status!</p>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item feedOptions">Comment</li>
+                                        <li class="list-inline-item feedOptions">Follow this post</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col feedItem mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-2 py-3">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
+                                </div>
+                                <div class="col-8">
+                                    <h4 class="feedName">Bradley Baker</h4>
+                                    <p class="feedStatus">But wait, there's more!</p>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item feedOptions">Comment</li>
+                                        <li class="list-inline-item feedOptions">Follow this post</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col feedItem mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-2 py-3">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
+                                </div>
+                                <div class="col-8">
+                                    <h4 class="feedName">Jonathon MacKenzie</h4>
+                                    <p class="feedStatus">But wait, there's more!</p>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item feedOptions">Comment</li>
+                                        <li class="list-inline-item feedOptions">Follow this post</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col feedItem mb-3">
+                            <div class="row align-items-center">
+                                <div class="col-2 col-sm-2 py-3">
+                                    <img src="resources/images/icon.png" alt="user profile photo" class="img-fluid">
+                                </div>
+                                <div class="col-8">
+                                    <h4 class="feedName">Mark Podrouzek</h4>
+                                    <p class="feedStatus">But wait, there's more!</p>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item feedOptions">Comment</li>
+                                        <li class="list-inline-item feedOptions">Follow this post</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+        <div class="col-12  col-sm-4 py-4 userOptionWindow" id="offlineOptions">
 
             <div class="row justify-content-center">
                 <div class="col-2 col-sm-5">
@@ -71,7 +176,7 @@
             </div>
 
             <div class="row justify-content-center">
-                <div class="col-12 col-md-6 mt-3">
+                <div class="col-12 col-md-9 mt-3">
                     <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#loginModal">
                         Login
                     </button>
@@ -130,6 +235,16 @@
                                required>
                     </div>
                 </form>
+
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center" id="successPrompt" hidden>
+                        <img src="resources/images/successgraphic.png" class="img-fluid" />
+                        <p class="text-center" id="signupSuccessLabel">Success!</p>
+                        <p class="text-center" id="signupFeedbackLabel">You have signed up successfully.</p>
+                        <button type="button" class="btn btn-primary btn-block" onclick="goHome();">See your profile now</button>
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -178,5 +293,4 @@
         </div>
     </div>
 </div>
-</body>
-</html>
+</b

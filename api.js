@@ -74,17 +74,37 @@ module.exports = function(app, db)
         function(err)
         {
             console.error(err);
-            return response.status(500).send("Error creating your account");
+            return res.status(500).send("Error creating your account");
         });
     });
 
-    app.get('/endpoint', function(req, res)
+    app.get('/ajax/user-messages', function(req, res)
     {
-        // do stuff
+        return res.status(200).send(req.user.messages);
     });
 
-    app.post('/another-endpoint', function(req, res)
+    app.post('/ajax/new-post', function(req, res)
     {
-        // do stuff
+        db.login.findOne({email : req.user.email}, function(err, result)
+        {
+            if(err)
+            {
+                return res.status(500).send("Sorry, an error occurred");
+            }
+            
+        });
+    });
+
+    app.post('/test/get-user-info', function(req, res)
+    {
+        db.login.findOne({email : req.user.email}, function(err, result)
+        {
+            if(err)
+            {
+                return res.status(500).send("Sorry, an error occurred");
+            }
+            
+            return result;
+        });
     });
 };

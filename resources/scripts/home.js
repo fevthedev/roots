@@ -78,33 +78,32 @@ function userLogin(){
 
 function userRegistration() {
     
-    var firstName = $("#userFirstName").val();
-    var lastName = $("#userLastName").val();
-    var email = $("#userEmail").val();
+    var fullName = $("#userFullName").val();
+    var userName = $("#userName").val();
     var password = $("#userPassword").val();
     var confirmPass = $("#userPasswordConfirm").val();
     
-    if (firstName.trim() === "") {
-		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter your first name.");
+    if (fullName.trim() === "") {
+		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter your name.");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
 		$("#signupFormAlert").removeClass("alert-success");
 		$("#signupFormAlert").addClass("alert-warning");
         $("#userFirstName").focus();
         return false;
-    } else if (lastName.trim() == "") {
-		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter your last name.");
+    } else if (userName.trim() == "") {
+		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a username.");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
 		$("#signupFormAlert").removeClass("alert-success");
 		$("#signupFormAlert").addClass("alert-warning");
         $("#userLastName").focus();
         return false;
-    } else if (!validateEmail(email)) {
-		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid email address.");
-		$("#signupFormAlert").removeClass("hidden-xs-up");
-		$("#signupFormAlert").removeClass("alert-success");
-		$("#signupFormAlert").addClass("alert-warning");
-        $("#userEmail").focus();
-        return false;
+    // } else if (!validateEmail(email)) {
+	// 	$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid email address.");
+	// 	$("#signupFormAlert").removeClass("hidden-xs-up");
+	// 	$("#signupFormAlert").removeClass("alert-success");
+	// 	$("#signupFormAlert").addClass("alert-warning");
+    //     $("#userEmail").focus();
+    //     return false;
     } else if (password.trim() == "") {
 		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid password. Your password should not consist of only spaces.");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
@@ -128,12 +127,14 @@ function userRegistration() {
     $.ajax({
         method: "post",
         url: "ajax/create-user",
-        dataType: JSON,
+        // in quotes because https://stackoverflow.com/questions/40734625/ajax-post-showing-an-error-when-try-to-upgrade-jquery-version
+        dataType: 'JSON',
         data: formData,
         success: function(response) {
             if (response) {
-                var obj = JSON.parse(response);
-                /* blah blah blah */
+                // For now just returning a string with either success or an error msg
+                // var obj = JSON.parse(response);
+                alert(response); // For now at least - Jon
             }
         }
     

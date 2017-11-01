@@ -5,6 +5,7 @@ const PORT = require('./config.js').portnumber;
 // ### SETUP
 
 var express    = require('express');         // HTTP/ routing/ web server
+var exphbs     = require('express-handlebars');
 var mongodb    = require('mongodb');         // NoSQL database (JSON-like)
 var bodyParser = require('body-parser');     // for parsing data from client
 var session    = require('client-sessions'); // cookies/ user accounts
@@ -15,11 +16,78 @@ var as         = require('async');           // makes asynchronous code less of 
 // secret key for encrypting cookies
 const secretKey = "CGgnvg2$zc#!Kz2EVh8GZTkNpaxj!5HE";
 
+var hbs = exphbs.create
+({
+    helpers:
+    {
+        sep: function()
+        {
+            return "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;";
+        },
+        // http://chrismontrois.net/2016/01/30/handlebars-switch/
+        switch : function(value, options)
+        {
+            this._switch_value_ = value;
+            var html = options.fn(this); // Process the body of the switch block
+            delete this._switch_value_;
+            return html;
+        },
+        case : function(value, options)
+        {
+            if (value == this._switch_value_)
+                return options.fn(this);
+        },
+        // http://doginthehat.com.au/2012/02/comparison-block-helper-for-handlebars-templates/#comment-44
+        compare: function (lvalue, operator, rvalue, options)
+        {
+            var operators, result;
+
+            if (arguments.length < 3)
+            {
+                throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+            }
+
+            if (options === undefined)
+            {
+                options  = rvalue;
+                rvalue   = operator;
+                operator = "===";
+            }
+
+            operators =
+            {
+                '=='     : function (l, r) { return l == r; },
+                '==='    : function (l, r) { return l === r; },
+                '!='     : function (l, r) { return l != r; },
+                '!=='    : function (l, r) { return l !== r; },
+                '<'      : function (l, r) { return l < r; },
+                '>'      : function (l, r) { return l > r; },
+                '<='     : function (l, r) { return l <= r; },
+                '>='     : function (l, r) { return l >= r; },
+                'typeof' : function (l, r) { return typeof l == r; }
+            };
+
+            if (!operators[operator])
+            {
+                throw new Error("Handlerbars Helper 'compare' doesn't know the operator " + operator);
+            }
+
+            result = operators[operator](lvalue, rvalue);
+
+            if (result) {return options.fn(this);}
+            else        {return options.inverse(this);}
+        }
+    },
+    defaultLayout: 'main',
+    extname: '.hbs',
+    partialsDir: ['views/partials/']
+});
+
 // main app object
 var app = express();
 
-// app.engine('hbs', hbs.engine);
-// app.set('view engine', 'hbs');
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
 app.use(express.static(__dirname + "/resources")); // all resources in resources folder
 app.use(bodyParser()); // so we can parse data from client using req.body
 

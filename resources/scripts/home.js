@@ -205,6 +205,23 @@ function showEvents(label) {
 
 }
 
+function showMessages(label) {
+
+    $(".tabLabel").css({
+        "background-color": "#ffffff",
+        "color": "#000000"
+    });
+
+    $(label).css({
+        "background-color": "#81e5bc",
+        "color": "#ffffff"
+    });
+
+    $(".contentItem").fadeOut("slow").attr("hidden", true);
+    $("#profileMailContent").attr("hidden", false).fadeIn("slow");
+
+}
+
 function goHome() {
     location.assign("index.html");
 }

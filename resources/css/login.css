@@ -1,0 +1,49 @@
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -100;
+    background: url('/images/loginraindrops.png') no-repeat;
+    background-size: cover;
+    transition: 1s opacity;
+}
+
+.userOptionWindow {
+    background-color: rgba(0,0,0,0.8);
+    border-radius: 15px;
+    border: 1px solid #81e5bc;
+}
+
+#userOptionsSection {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#offlineFeed {
+    color: white;
+}
+
+#offlineFeedItemContainer {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#offlineOptions {
+    max-height: 350px;
+}
+
+#disclaimerText {
+    color: #81e5bc;
+}
+
+#signupSuccessLabel {
+
+}
+
+#signupFeedbackLabel {
+
+}

@@ -7,8 +7,9 @@ module.exports = function(app, db)
 {
     app.get('/', function(req, res)
     {
-        console.log("sending index.html");
-        return res.status(200).sendfile(req.user ? "index.html" : "login.html");
+        console.log("rendering index.html");
+        if(req.user) return res.status(200).render('homepage', {user : req.user});
+        else         return res.status(200).render('login');
     });
 };
 

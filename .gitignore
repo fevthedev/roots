@@ -3,3 +3,5 @@ config.js
 .jshintrc
 .vscode
 notes.txt
+package-lock.json
+

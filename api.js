@@ -14,13 +14,18 @@ module.exports = function(app, db)
 
     app.post('/ajax/login', function(req, res)
     {
-        db.login.findOne({email : req.body.usrEmail}, function(err, user)
+        db.users.findOne({username : req.body.usrLoginName}, function(err, user)
         {
-            if(err) return res.status(200).send("Error: " + err);
+            if(err) return res.status(200).send(JSON.stringify({error: "Invalid username or password"}));
 
-            // If we cant find a user with that email address...
-            if(!user || user.password != usrPass) return res.status(200).send("Invalid email or password");
-            else return res.status(200).send("SUCCESS");
+            // If we cant find a user with that username/ password combo...
+            if(!user || user.password != req.body.usrPass) return res.status(200).send((JSON.stringify({error: "Invalid username or password"})));
+            else
+            {
+                delete user.password;
+                req.session.user = user;
+                return res.status(200).send(JSON.stringify("SUCCESS"));
+            }
         });
     });
 
@@ -32,6 +37,8 @@ module.exports = function(app, db)
 
     app.post('/ajax/create-user', function(req, res)
     {
+        // return res.status(200).send(req.body);
+
         // parse the data from the request body
         var userData = req.body;
 
@@ -40,7 +47,7 @@ module.exports = function(app, db)
             function(callback)
             {
                 // Make sure their email address isn't already registered
-                db.login.findOne({email : userData.usrEmail}, function(err, result)
+                db.users.findOne({username : userData.userName}, function(err, result)
                 {
                     if(result)
                     {
@@ -51,14 +58,26 @@ module.exports = function(app, db)
             },
             function(callback)
             {
-                // add email/ password combination into login collection in db
-                db.login.insert({email : userData.email, password: userData.usrPass}, function(err, result)
-                {
-                    if(err) callback(err);
-                });
+                // // add email/ password combination into login collection in db
+                // db.login.insert({email : userData.email, password: userData.usrPass}, function(err, result)
+                // {
+                //     if(err) callback(err);
+                // });
 
-                // remove password from user object, we don't want to store it anywhere
-                delete userData.usrPass;
+                // // remove password from user object, we don't want to store it anywhere
+                // delete userData.usrPass;
+
+                delete userData.userPasswordConfirm;
+
+                // rename fields
+
+                userData.username = userData.userName;
+                userData.name     = userData.userFullName;
+                userData.password = userData.userPassword;
+
+                delete userData.userName;
+                delete userData.userFullName;
+                delete userData.userPassword;
 
                 // add user to collection of users in db
                 db.users.insert(userData, function(err, user)

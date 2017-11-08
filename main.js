@@ -103,7 +103,7 @@ mongodb.connect('mongodb://localhost:27017/roots', function(error, database)
     }
 
     db.users = database.collection('users');
-    db.login = database.collection('login');
+    // db.login = database.collection('login');
 
     console.log("Connected to database");
 
@@ -136,22 +136,23 @@ app.use(function (req, res, next)
     // req.user to them so we can access their info
     if (req.session && req.session.user)
     {
-        db.users.findOne({email: req.session.user.email}, function(err, user)
+        db.users.findOne({username: req.session.user.username}, function(err, user)
         {
             if(user)
             {
-                if(!user.cookie) // Make sure they actually have a cookie
+                if(!user.cookie)
                 {
-                    // keep cookie small by only using email
+                    // keep cookie small by only using username
                     user.cookie =
                     {
-                        email : user.email
+                        username : user.username
                     };
                 }
 
                 req.user = user;
                 req.session.user = user.cookie; // refresh
             }
+            next();
         });
     }
     else next();
@@ -171,7 +172,7 @@ require('./api.js')(app, db);
 app.use(function(req, res)
 {
     res.status(404);
-    // do something else...
+    return res.send("<h1>404 - Page not found</h1> <br> Sorry, that address doesn't exist");
 });
 
 // Start it up, output confirmation that we are listening on the port specified in config.js

@@ -32,13 +32,13 @@ $(function() {
 
 function userLogin(){
 
-    goHome();
-    return true;
-    var email = $("#userLoginEmail").val();
+    // goHome();
+    // return true;
+    var username = $("#userLoginName").val();
     var password = $("#userLoginPassword").val();
     
-    if (!validateEmail(email)) {
-		$("#loginFormAlert").html("<strong>Missing information: </strong>Please enter a valid email address.");
+    if (username == "") {
+		$("#loginFormAlert").html("<strong>Missing information: </strong>Please enter your username.");
 		$("#loginFormAlert").removeClass("hidden-xs-up");
 		$("#loginFormAlert").removeClass("alert-success");
 		$("#loginFormAlert").addClass("alert-warning");
@@ -55,20 +55,19 @@ function userLogin(){
         $("#loginFormAlert").addClass("hidden-xs-up");
         $.ajax({
             method: "post",
-            url: "ajax/login",
-            data: { usrEmail : email, usrPass : password },
+            url: "/ajax/login",
+            data: { usrLoginName : username, usrPass : password },
             success: function (response) {
                 if (response) {
                     var obj = JSON.parse(response);
+                    console.log(obj.error);
                     
-					if (!obj.error) {
-						$("#loginFormAlert").removeClass("hidden");
-						$("#loginFormAlert").removeClass("alert-warning");
-						$("#loginFormAlert").addClass("alert-success");
-					} else {
+					if (obj.error) {
 						$("#loginFormAlert").removeClass("hidden");
 						$("#loginFormAlert").removeClass("alert-success");
 						$("#loginFormAlert").addClass("alert-warning");
+					} else {
+						location.reload();
 					}
                 }
             }
@@ -79,9 +78,6 @@ function userLogin(){
 }
 
 function userRegistration() {
-
-    showSuccessPrompt();
-    return true;
     
     var fullName = $("#userFullName").val();
     var userName = $("#userName").val();
@@ -102,20 +98,20 @@ function userRegistration() {
 		$("#signupFormAlert").addClass("alert-warning");
         $("#userLastName").focus();
         return false;
-    // } else if (!validateEmail(email)) {
-	// 	$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid email address.");
-	// 	$("#signupFormAlert").removeClass("hidden-xs-up");
-	// 	$("#signupFormAlert").removeClass("alert-success");
-	// 	$("#signupFormAlert").addClass("alert-warning");
-    //     $("#userEmail").focus();
-    //     return false;
-    } else if (password.trim() == "") {
-		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid password. Your password should not consist of only spaces.");
+    } else if (userName.indexOf(' ') >= 0) {
+		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid user name (no spaces).");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
 		$("#signupFormAlert").removeClass("alert-success");
 		$("#signupFormAlert").addClass("alert-warning");
-        $("#userPassword").focus();
+        $("#userEmail").focus();
         return false;
+    // } else if (password.trim() == "") {
+	// 	$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid password. Your password should not consist of only spaces.");
+	// 	$("#signupFormAlert").removeClass("hidden-xs-up");
+	// 	$("#signupFormAlert").removeClass("alert-success");
+	// 	$("#signupFormAlert").addClass("alert-warning");
+    //     $("#userPassword").focus();
+    //     return false;
     } else if (password.trim() !== confirmPass.trim()) {
 		$("#signupFormAlert").html("<strong>Missing information: </strong>Passwords do not match. Please check and try again.");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
@@ -131,7 +127,7 @@ function userRegistration() {
     
     $.ajax({
         method: "post",
-        url: "ajax/create-user",
+        url: "/ajax/create-user",
         // in quotes because https://stackoverflow.com/questions/40734625/ajax-post-showing-an-error-when-try-to-upgrade-jquery-version
         dataType: 'JSON',
         data: formData,
@@ -139,20 +135,23 @@ function userRegistration() {
             if (response) {
                 // For now just returning a string with either success or an error msg
                 // var obj = JSON.parse(response);
-                alert(response); // For now at least - Jon
+                console.log(response); // For now at least - Jon
             }
+            showSuccessPrompt();
+            return true;
         }
-    
     });
 }
 
-function validateEmail(email) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){  
-        return (true)  
-    } else {
-        return false;
-    }
-}
+// Don't need this if we're not using email addresses
+
+// function validateEmail(email) {
+//     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){  
+//         return (true)  
+//     } else {
+//         return false;
+//     }
+// }
 
 function showActivity(label) {
 
@@ -223,13 +222,13 @@ function showMessages(label) {
 
 }
 
-function goHome() {
-    location.assign("index.html");
-}
+// function goHome() {
+//     location.assign("index.html");
+// }
 
-function goOffline() {
-    location.assign("login.html");
-}
+// function goOffline() {
+//     location.assign("login.html");
+// }
 
 function showSuccessPrompt() {
 

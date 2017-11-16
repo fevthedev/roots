@@ -16,10 +16,11 @@
   },
   "devDependencies": {
     "nodemon": "*",
-    "forever": "*"
+    "forever": "*",
+    "hbsfy": "*"
   },
   "scripts": {
-    "test": "nodemon main.js",
+    "test": "nodemon --inspect main.js",
     "start": "forever -w --watchDir . start main.js"
   },
   "contributors": [

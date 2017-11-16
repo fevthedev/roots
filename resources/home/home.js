@@ -1,4 +1,10 @@
+var post_template = require("./templates/post.hbs");
+
+var Handlebars = require("hbsfy/runtime");
+
 $(function() {
+
+    populateFeed();
 
     $(".feedItem").click(function(){
 
@@ -25,10 +31,56 @@ $(function() {
             $("img",this).attr("src", "resources/images/interestedgold.png");
 
         }
-
-
     });
+
+    $("#postStatusBtn").click(postStatus);
+    $("#submitSignupBtn").click(userRegistration);
+    $("#submitLoginBtn").click(userLogin);
+    $("#signupSucessBtn").click(function(){window.location.reload();});
+    $("#signoutBtn").click(logout);
 });
+
+function postStatus()
+{
+    $.post("/ajax/new-post",
+    {
+        messageBody : document.getElementById("statusEntryField").value
+    }, function(retData)
+    {
+        populateFeed();
+    }).fail(function(err)
+    {
+        alert("Sorry, an error occurred. Please inform an administrator.");
+        console.log(err);
+    });
+}
+
+function populateFeed()
+{
+    var feed;
+    try
+    {
+        feed= document.getElementById("feed");
+        feed.innerHTML = "<h3 class='my-3'>Feed</h3>";
+    }
+    catch(e)
+    {
+        feed = document.getElementById("offlineFeedItemContainer");
+    }
+
+    $.get("/ajax/get-posts", function(posts)
+    {
+        // iterate backwards for newest first
+        for(var i = posts.length - 1; i >=0; i--)
+        {
+            feed.innerHTML += post_template(posts[i]);
+        }
+    }).fail(function(err)
+    {
+        console.log(err);
+        alert("Sorry, an error occurred. Please inform an administrator");
+    });
+}
 
 function userLogin(){
 
@@ -44,14 +96,15 @@ function userLogin(){
 		$("#loginFormAlert").addClass("alert-warning");
         $("#userLoginEmail").focus();
         return false;
-    } else if (password == "") {
+    } //else if (password == "") {
     //    $("#loginFormAlert").html("<strong>Missing information: </strong>Please enter your password.");
 	//	$("#loginFormAlert").removeClass("hidden-xs-up");
 	//	$("#loginFormAlert").removeClass("alert-success");
 	//	$("#loginFormAlert").addClass("alert-warning");
     //    $("#userLoginPassword").focus();
     //    return false;
-    } else {
+    //}
+    else {
         $("#loginFormAlert").addClass("hidden-xs-up");
         $.ajax({
             method: "post",
@@ -60,6 +113,8 @@ function userLogin(){
             success: function (response) {
                 if (response) {
                     var obj = JSON.parse(response);
+                    console.log(response);
+                    console.log(obj);
 
 					if (obj.error) {
                         console.log(obj.error);
@@ -253,13 +308,3 @@ function showSuccessPrompt() {
     });
 }
 
-document.getElementById("postStatusBtn").onclick = function()
-{
-    $.post("/ajax/new-post",
-    {
-
-    }, function(retData)
-    {
-
-    });
-};

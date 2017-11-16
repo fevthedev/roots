@@ -15,73 +15,7 @@
 
                     <h3 class="my-3">What's happening</h3>
 
-                    <div id="offlineFeedItemContainer">
-                        <div class="col feedItem mb-3">
-                            <div class="row align-items-center">
-                                <div class="col-2 col-sm-2 py-3">
-                                    <img src="/images/icon.png" alt="user profile photo" class="img-fluid">
-                                </div>
-                                <div class="col-8">
-                                    <h4 class="feedName">Christopher Fevrier</h4>
-                                    <p class="feedStatus">One interesting status!</p>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item feedOptions">Comment</li>
-                                        <li class="list-inline-item feedOptions">Follow this post</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col feedItem mb-3">
-                            <div class="row align-items-center">
-                                <div class="col-2 col-sm-2 py-3">
-                                    <img src="/images/icon.png" alt="user profile photo" class="img-fluid">
-                                </div>
-                                <div class="col-8">
-                                    <h4 class="feedName">Bradley Baker</h4>
-                                    <p class="feedStatus">But wait, there's more!</p>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item feedOptions">Comment</li>
-                                        <li class="list-inline-item feedOptions">Follow this post</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col feedItem mb-3">
-                            <div class="row align-items-center">
-                                <div class="col-2 col-sm-2 py-3">
-                                    <img src="/images/icon.png" alt="user profile photo" class="img-fluid">
-                                </div>
-                                <div class="col-8">
-                                    <h4 class="feedName">Jonathon MacKenzie</h4>
-                                    <p class="feedStatus">But wait, there's more!</p>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item feedOptions">Comment</li>
-                                        <li class="list-inline-item feedOptions">Follow this post</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col feedItem mb-3">
-                            <div class="row align-items-center">
-                                <div class="col-2 col-sm-2 py-3">
-                                    <img src="/images/icon.png" alt="user profile photo" class="img-fluid">
-                                </div>
-                                <div class="col-8">
-                                    <h4 class="feedName">Mark Podrouzek</h4>
-                                    <p class="feedStatus">But wait, there's more!</p>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item feedOptions">Comment</li>
-                                        <li class="list-inline-item feedOptions">Follow this post</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+                    <div id="offlineFeedItemContainer"></div>
                 </div>
             </div>
 
@@ -165,15 +99,14 @@
                         <img src="/images/successgraphic.png" class="img-fluid" />
                         <p class="text-center" id="signupSuccessLabel">Success!</p>
                         <p class="text-center" id="signupFeedbackLabel">You have signed up successfully.</p>
-                        <button type="button" class="btn btn-primary btn-block" onclick="goHome();">See your profile now</button>
+                        <button type="button" id="signupSuccessBtn" class="btn btn-primary btn-block">See your profile now</button>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" name="submitSignupBtn" id="submitSignupBtn"
-                        onclick="userRegistration();">Continue
+                <button type="button" class="btn btn-primary" name="submitSignupBtn" id="submitSignupBtn">Continue
                 </button>
             </div>
         </div>
@@ -210,8 +143,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success" name="submitLoginBtn" id="submitLoginBtn"
-                        onclick="userLogin();">Continue
+                <button type="button" class="btn btn-success" name="submitLoginBtn" id="submitLoginBtn">Continue
                 </button>
             </div>
         </div>

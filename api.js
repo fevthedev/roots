@@ -56,7 +56,7 @@ module.exports = function(app, db)
         ([
             function(callback)
             {
-                // Make sure their email address isn't already registered
+                // Make sure their username isn't already registered
                 db.users.findOne({username : userData.userName}, function(err, result)
                 {
                     if(result)
@@ -68,8 +68,8 @@ module.exports = function(app, db)
             },
             function(callback)
             {
-                // // add email/ password combination into login collection in db
-                // db.login.insert({email : userData.email, password: userData.usrPass}, function(err, result)
+                // // add username/ password combination into login collection in db
+                // db.login.insert({username : userData.username, password: userData.usrPass}, function(err, result)
                 // {
                 //     if(err) callback(err);
                 // });
@@ -114,19 +114,33 @@ module.exports = function(app, db)
 
     app.post('/ajax/new-post', function(req, res)
     {
-        db.login.findOne({email : req.user.email}, function(err, result)
+        post = req.body;
+
+        db.users.findOne({username : req.user.username}, function(err, result)
         {
             if(err)
             {
                 return res.status(500).send("Sorry, an error occurred");
             }
 
+            post.user = result.name;
+            post.timestamp = new Date().getTime();
+
+            db.posts.insert(post, function(err, result)
+            {
+                if(err)
+                {
+                    return res.status(500).send("Sorry, an error occurred");
+                }
+
+                return res.status(200).send(post);
+            });
         });
     });
 
     app.post('/test/get-user-info', function(req, res)
     {
-        db.login.findOne({email : req.user.email}, function(err, result)
+        db.login.findOne({username : req.user.username}, function(err, result)
         {
             if(err)
             {

@@ -36,7 +36,7 @@ function userLogin(){
     // return true;
     var username = $("#userLoginName").val();
     var password = $("#userLoginPassword").val();
-    
+
     if (username == "") {
 		$("#loginFormAlert").html("<strong>Missing information: </strong>Please enter your username.");
 		$("#loginFormAlert").removeClass("hidden-xs-up");
@@ -45,12 +45,12 @@ function userLogin(){
         $("#userLoginEmail").focus();
         return false;
     } else if (password == "") {
-        $("#loginFormAlert").html("<strong>Missing information: </strong>Please enter your password.");
-		$("#loginFormAlert").removeClass("hidden-xs-up");
-		$("#loginFormAlert").removeClass("alert-success");
-		$("#loginFormAlert").addClass("alert-warning");
-        $("#userLoginPassword").focus();
-        return false;
+    //    $("#loginFormAlert").html("<strong>Missing information: </strong>Please enter your password.");
+	//	$("#loginFormAlert").removeClass("hidden-xs-up");
+	//	$("#loginFormAlert").removeClass("alert-success");
+	//	$("#loginFormAlert").addClass("alert-warning");
+    //    $("#userLoginPassword").focus();
+    //    return false;
     } else {
         $("#loginFormAlert").addClass("hidden-xs-up");
         $.ajax({
@@ -60,9 +60,9 @@ function userLogin(){
             success: function (response) {
                 if (response) {
                     var obj = JSON.parse(response);
-                    console.log(obj.error);
-                    
+
 					if (obj.error) {
+                        console.log(obj.error);
 						$("#loginFormAlert").removeClass("hidden");
 						$("#loginFormAlert").removeClass("alert-success");
 						$("#loginFormAlert").addClass("alert-warning");
@@ -73,17 +73,28 @@ function userLogin(){
             }
         });
     }
-    
-    
+
+
+}
+
+function logout()
+{
+    $.ajax({
+        method: "get",
+        url: "/ajax/logout",
+        success: function (response) {
+            location.reload();
+        }
+    });
 }
 
 function userRegistration() {
-    
+
     var fullName = $("#userFullName").val();
     var userName = $("#userName").val();
     var password = $("#userPassword").val();
     var confirmPass = $("#userPasswordConfirm").val();
-    
+
     if (fullName.trim() === "") {
 		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter your name.");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
@@ -120,11 +131,11 @@ function userRegistration() {
         $("#userPassword").focus();
         return false;
     }
-    
+
     var formData = $("#signupForm").serialize();
-	
+
 	$("#signupFormAlert").addClass("hidden-xs-up");
-    
+
     $.ajax({
         method: "post",
         url: "/ajax/create-user",
@@ -132,6 +143,8 @@ function userRegistration() {
         dataType: 'JSON',
         data: formData,
         success: function(response) {
+            console.log("++++++++++++++++++++++++++++++++++++");
+
             if (response) {
                 // For now just returning a string with either success or an error msg
                 // var obj = JSON.parse(response);
@@ -146,8 +159,8 @@ function userRegistration() {
 // Don't need this if we're not using email addresses
 
 // function validateEmail(email) {
-//     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){  
-//         return (true)  
+//     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+//         return (true)
 //     } else {
 //         return false;
 //     }
@@ -239,3 +252,14 @@ function showSuccessPrompt() {
 
     });
 }
+
+document.getElementById("postStatusBtn").onclick = function()
+{
+    $.post("/ajax/new-post",
+    {
+
+    }, function(retData)
+    {
+
+    });
+};

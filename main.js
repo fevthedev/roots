@@ -103,7 +103,7 @@ mongodb.connect('mongodb://localhost:27017/roots', function(error, database)
     }
 
     db.users = database.collection('users');
-    // db.login = database.collection('login');
+    db.posts = database.collection('posts');
 
     console.log("Connected to database");
 

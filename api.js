@@ -12,6 +12,16 @@ module.exports = function(app, db)
         return res.status(200).send("thanks!");
     });
 
+    app.get('/ajax/get-posts', function(req, res)
+    {
+        db.posts.find().toArray(function(err, arr)
+        {
+            if(err) return res.status(500).send(err);
+
+            return res.status(200).send(arr);
+        });
+    });
+
     app.post('/ajax/login', function(req, res)
     {
         db.users.findOne({username : req.body.usrLoginName}, function(err, user)
@@ -51,7 +61,7 @@ module.exports = function(app, db)
                 {
                     if(result)
                     {
-                        return res.status(200).send("email already registered");
+                        return res.status(200).send("username already registered");
                     }
                     else callback(null);
                 });
@@ -110,7 +120,7 @@ module.exports = function(app, db)
             {
                 return res.status(500).send("Sorry, an error occurred");
             }
-            
+
         });
     });
 
@@ -122,7 +132,7 @@ module.exports = function(app, db)
             {
                 return res.status(500).send("Sorry, an error occurred");
             }
-            
+
             return result;
         });
     });

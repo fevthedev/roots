@@ -7,7 +7,6 @@ module.exports = function(app, db)
 {
     app.get('/', function(req, res)
     {
-        console.log("get /");
         if(req.user) return res.status(200).render('homepage', {user : req.user});
         else         return res.status(200).render('login');
     });

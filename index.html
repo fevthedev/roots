@@ -21,6 +21,10 @@
 </head>
 <body>
 
+<script>
+    checkFontSize();
+</script>
+
 <div class="container">
     <div class="row">
         <div class="col py-3 mb-3" id="header">
@@ -46,10 +50,10 @@
                             <strong>Font too small? Click here</strong>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">125%</a>
-                            <a class="dropdown-item" href="#">150%</a>
-                            <a class="dropdown-item" href="#">175%</a>
-                            <a class="dropdown-item" href="#">200%</a>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); setFontSize(1.25);">125%</a>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); setFontSize(1.5);">150%</a>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); setFontSize(1.75);">175%</a>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); setFontSize(2.0);">200%</a>
                         </div>
                     </div>
 

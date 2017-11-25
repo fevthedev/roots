@@ -239,3 +239,93 @@ function showSuccessPrompt() {
 
     });
 }
+
+// Scrapping cookie and just storing font size in db
+/*
+function checkCookie() {
+    var cookie = document.cookie;
+    var cookieList = cookie.split(";");
+
+    if (cookieList.length > 0) {
+        
+        for (var i=0; i<cookieList.length; i++) {
+
+            alert(cookieList[i]);
+        }
+    }
+    
+}
+
+function setFontSizeCookie(size) {
+    if (isNaN(size)) { return false;}
+    var cookie = "fontsize=" + size;
+    var d = new Date();
+    d.setTime(d.getTime() + (150*24*60*60*1000));
+    var expires = "expires=" + d.toUTCString();
+    cookie += (";" + expires);
+    document.cookie = cookie;
+    location.reload();
+}
+*/
+
+function checkFontSize() {
+
+    var checkFont = 1;
+    //$("body").addClass("font-xl"); return true;
+
+    $.ajax({
+        
+        type: "POST",
+        url: "",
+        data: { fontFlag: checkFont },
+        dataType: "json",
+        success: function(response) {
+            var obj = JSON.parse(response);
+
+            if (obj.success) {
+                switch (obj.size) {
+
+                    case "rg":
+                        $("body").addClass("font-rg");
+                        break;
+
+                    case "lg":
+                        $("body").addClass("font-lg");
+                        break;
+
+                    case "xl":
+                        $("body").addClass("font-xl");
+                        break;
+
+                    case "xxl":
+                        $("body").addClass("font-xxl");
+                        break;
+
+                    default:
+                        $("body").addClass("font-rg");
+                        break;
+
+                }
+            }
+        }
+    });
+}
+
+function setFontSize(size) {
+    
+    $.ajax({
+
+        type: "POST",
+        url: "",
+        data: { fontSize: size },
+        dataType: "json",
+        success: function(response) {
+            var obj = JSON.parse(response);
+
+            if (obj.success) {
+                location.reload();
+            }
+        }
+    });
+
+}

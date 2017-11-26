@@ -27,8 +27,8 @@
             min-width: 100%;
             min-height: 100%;
             z-index: -100;
-            background: url('resources/images/loginraindrops.png') no-repeat;
-            background-size: cover;
+            /* background: url('resources/images/sun.png') no-repeat;*/
+            background-size: cover; 
             transition: 1s opacity;
         }
 
@@ -74,10 +74,82 @@
 </head>
 <body>
 
-<video poster="http://mrfevrier.com/mediastore/image/loginraindrops.png" id="bgvid" playsinline autoplay muted loop>
-    <!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
-    <source src="http://mrfevrier.com/mediastore/video/Raindrops_Videvo.mp4" type="video/mp4">
-</video>
+    <video poster="" id="bgvid" playsinline autoplay muted loop>
+        <!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
+        <source src="" type="video/mp4">
+    </video>
+
+    <script>
+        
+        var weather = "";
+        var videoStream = "";
+        var imageStream = "";
+        var cityID = 6324729;   //Halifax city ID retrieved from /resources/city.list.json
+        var apiKEY = "004f5ffc66ae8f85f79056c030b21265";
+        var apiURL = "http://api.openweathermap.org";
+        //var testData = {"coord":{"lon":-63.57,"lat":44.65},"weather":[{"id":741,"main":"Fog","description":"fog","icon":"50n"}],"base":"stations","main":{"temp":283.15,"pressure":1006,"humidity":100,"temp_min":283.15,"temp_max":283.15},"visibility":805,"wind":{"speed":4.6,"deg":160},"clouds":{"all":90},"dt":1511655600,"sys":{"type":1,"id":3488,"message":0.2015,"country":"CA","sunrise":1511695529,"sunset":1511728654},"id":6324729,"name":"Halifax","cod":200};
+
+        if (weatherTimeCheck()) {
+            // Calls weather API to determine login page scenery
+            $.ajax({
+                type: "GET",
+                url: apiURL,
+                dataType: "json",
+                data: {id: cityID, APPID: apiKEY},
+                success: function(response) {
+                    var obj = JSON.parse(response);
+                    weather = (obj.weather[0].main).toLowerCase();
+                    document.cookie = "weatherstate=" + weather;
+                    
+                    switch (weather) {
+                        case "Fog":
+                        videoStream = "http://mrfevrier.com/mediastore/video/fog.mp4";
+                        imageStream = "http://mrfevrier.com/mediastore/image/fog.png";
+                        break;
+
+                        case "Rain":
+                        videoStream = "http://mrfevrier.com/mediastore/video/rain.mp4";
+                        imageStream = "http://mrfevrier.com/mediastore/image/rain.png";
+                        break;
+
+                        case "Snow":
+                        videoStream = "http://mrfevrier.com/mediastore/video/snow.mp4";
+                        imageStream = "http://mrfevrier.com/mediastore/image/snow.png";
+                        break;
+
+                        case "Clear":
+                        videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
+                        imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
+                        break;
+
+                        default:
+                        videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
+                        imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
+                        break;
+                    }
+                }
+            });
+        } else {
+            // Use weather state from last stored weather cookie
+            var state = getCookieValue("weatherstate");
+
+            if (state != "" && state != null) {
+                videoStream = "http://mrfevrier.com/mediastore/video/" + state + ".mp4";
+                imageStream = "http://mrfevrier.com/mediastore/image/" + state + ".png";
+            } else {
+                videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
+                imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
+            }
+            
+        }
+
+
+        $("#bgvid").css("background","url('resources/images/" + weather.toLowerCase() + ".png') no-repeat");
+        $("#bgvid").attr("poster", imageStream);
+        $("#bgvid source").attr("src", videoStream);
+        
+        
+    </script>
 
 <div class="container">
 

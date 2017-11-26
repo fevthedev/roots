@@ -329,3 +329,65 @@ function setFontSize(size) {
     });
 
 }
+
+function weatherTimeCheck() {
+    var found = false;
+    var cookieValue = 0;
+    var cookies = document.cookie;
+
+    if (cookies != "") {
+        var cookieList = cookies.split(";");
+
+        for (var i=0; i<cookieList.length; i++) {
+            var splitCookie = cookieList[i].split("=");
+            var cookieName = splitCookie[0].replace(" ","");
+            
+            if (cookieName === "timecheck") {
+                cookieValue = splitCookie[1];
+                alert(cookieValue);
+                found = true;
+            }
+
+        }
+
+    }
+
+    if (!found) {
+        // get current timestamp
+        // store as cookie
+        var checkTime = new Date().getTime();
+        var weatherCheckTimeCookie = "timecheck=" + checkTime;
+        document.cookie = weatherCheckTimeCookie;
+        return true;
+    } else {
+        //get current timestamp
+        //compare to time in cookie
+        //If more than 20 minutes from last timecheck cookie - renew cookie - return true
+        var newTime = new Date().getTime();
+        var timeVariance = 20 * 60 * 1000; // 20 minutes
+
+        if ((newTime - cookieValue) > timeVariance) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function getCookieValue(cookieName) {
+    var cookies = document.cookie;
+    
+    if (cookies != "") {
+        var cookieList = cookies.split(";");
+
+        for (var i=0; i<cookieList.length; i++) {
+            var cookie = cookieList[i];
+            var cookieSplit = cookie.split("=");
+            var name = cookieSplit[0].replace(" ","");
+            
+            if (name == cookieName) {
+                return cookieSplit[1];
+            }
+        }
+    }
+}

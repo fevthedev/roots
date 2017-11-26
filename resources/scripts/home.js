@@ -391,3 +391,30 @@ function getCookieValue(cookieName) {
         }
     }
 }
+
+function uploadProfile(fileInput) {
+    var changeConfirm = confirm("This will change your profile photo. Continue?");
+    if (changeConfirm) {
+        var imgFile = fileInput.files[0];
+        var formData = new FormData();
+        formData.append("profileImage", imgFile);
+
+        $.ajax({
+            type: "POST",
+            url: "",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // call function to retrieve updated profile image
+                //reload page to show image
+            },
+            error: function(jqXHR, textStatus, errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    } else {
+        return false;
+    }   
+    
+}

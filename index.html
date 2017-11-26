@@ -73,14 +73,19 @@
 
             <div class="row">
 
-                <div class="col-12 col-md-4" id="profileHeader">
+                <div class="col-12 col-md-4 text-center" id="profileHeader">
                     <!-- profile img with 5px border -->
-                    <img class="img-fluid" src="resources/images/profileplaceholder.png"/>
+                    <img class="img-fluid rounded" src="resources/images/profileplaceholder.png"/>
                     <!-- user name and status with edit link -->
 
-                    <div class="col py-3">
+                    <div class="py-3">
                         <h3 id="profileNameDisplay">Burt Reynolds</h3>
                         <p id="profileStatusDisplay">Tonight's gonna be a good night!</p>
+                        
+                        <form id="profilePhotoForm" enctype="multipart/form-data" action="">
+                            <input type="file" id="profileUpload" name="profileUpload" accept="image/*"  hidden onchange="uploadProfile(this);">
+                            <button type="submit" class="btn btn-primary" id="changeProfileBtn" onclick="event.preventDefault(); profileUpload.click();">Change Photo</button>
+                        </form>
                     </div>
                 </div>
 

@@ -7,8 +7,12 @@ module.exports = function(app, db)
 {
     app.get('/', function(req, res)
     {
-        if(req.user) return res.status(200).render('homepage', {user : req.user});
-        else         return res.status(200).render('login');
+        if(req.user)
+        {
+            req.user.mail.reverse(); // display mail in reverse chronological order
+            return res.status(200).render('homepage', {user : req.user});
+        }
+        else return res.status(200).render('login');
     });
 };
 

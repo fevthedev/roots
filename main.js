@@ -76,6 +76,12 @@ var hbs = exphbs.create
 
             if (result) {return options.fn(this);}
             else        {return options.inverse(this);}
+        },
+        time : function(value, options)
+        {
+            var a = (new Date(value) + "").split(" ");
+            var t = a[4].split(":");
+            return a[0] + ", " + a[1] + " " + a[2] + ", " +  a[3] + " at " + ((t[0]==0)?12:t[0]%12) + ":" + t[1] + " " + ((t[0]/12)?"pm":"am");
         }
     },
     defaultLayout: 'main',
@@ -104,6 +110,7 @@ mongodb.connect('mongodb://localhost:27017/roots', function(error, database)
 
     db.users = database.collection('users');
     db.posts = database.collection('posts');
+    db.profilePictures = database.collection('profile-pictures');
 
     console.log("Connected to database");
 

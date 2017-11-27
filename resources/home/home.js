@@ -1,10 +1,24 @@
 var post_template = require("./templates/post.hbs");
+var autocomplete_template = require("./templates/autocomplete.hbs");
 
 var Handlebars = require("hbsfy/runtime");
+
+Handlebars.registerHelper('time', function(value, options)
+{
+    var a = (new Date(value) + "").split(" ");
+    var t = a[4].split(":");
+    return a[0] + ", " + a[1] + " " + a[2] + ", " + a[3] + " at " + ((t[0]==0)?12:t[0]%12) + ":" + t[1] + " " + ((t[0]/12)?"pm":"am");
+});
+
+Handlebars.registerHelper('boldify', function(string, regex, options)
+{
+    return string.replace(new RegExp('(' + regex + ')', 'i'), "<b>$1</b>");
+});
 
 $(function() {
 
     populateFeed();
+    checkFontSize();
 
     $(".feedItem").click(function(){
 
@@ -23,22 +37,161 @@ $(function() {
         if ($(this).hasClass("interested")) {
 
             $(this).removeClass("interested");
-            $("img",this).attr("src", "resources/images/unselectedgold.png");
+            $("img",this).attr("src", "/images/unselectedgold.png");
 
         } else {
 
             $(this).addClass("interested");
-            $("img",this).attr("src", "resources/images/interestedgold.png");
+            $("img",this).attr("src", "/images/interestedgold.png");
 
         }
     });
 
+    // convoluted syntax to preserve value of el
+    for(let el of document.getElementsByClassName("reply-btn"))
+    {
+        el.onclick = function(messageid, senderid)
+        {
+            return function()
+            {
+                sendMail(document.getElementById("mailReplyMessage_" + messageid).value, senderid);
+            };
+        }(el.id.split("_")[1], el.id.split("_")[2]);
+    }
+
+    //for(let el of document.getElementsByClassName("delete-btn"))
+    //{
+    //    el.onclick = function(messageid)
+    //    {
+    //        return function()
+    //        {
+    //            document.getElementById("mailLi_" + messageid).outerHTML = "";
+    //            document.getElementById("mailItem_" + messageid).outerHTML = "";
+    //            $.post("/ajax/delete-message", {id: messageid}, function(res)
+    //            {
+    //                //...
+    //            });
+    //        };
+    //    }(el.id.split("_")[1]);
+    //}
+
+
+    $("#font125").click(function(){setFontSize(125);});
+    $("#font150").click(function(){setFontSize(150);});
+    $("#font175").click(function(){setFontSize(175);});
+    $("#font200").click(function(){setFontSize(200);});
     $("#postStatusBtn").click(postStatus);
     $("#submitSignupBtn").click(userRegistration);
     $("#submitLoginBtn").click(userLogin);
-    $("#signupSucessBtn").click(function(){window.location.reload();});
     $("#signoutBtn").click(logout);
+    $("#profileTabActivity").click(showActivity);
+    $("#profileTabPhotos").click(showGallery);
+    $("#profileTabEvents").click(showEvents);
+    $("#profileTabMail").click(showMessages);
+    $("#changeProfilePicBtn").click(profilePic);
+    $("#mailCancelBtn").click(resetMail);
+    $("#mailNameSearchBox").on('keyup', mailAutoComplete);
 });
+
+function mailAutoComplete()
+{
+    var str = document.getElementById("mailNameSearchBox").value;
+    var resultsDiv = document.getElementById("mailSearchResults");
+
+    $.post('/ajax/search-by-name', {search: str}, function(results)
+    {
+        resultsDiv.innerHTML = "";
+        for(var user of results)
+        {
+            resultsDiv.innerHTML += autocomplete_template({user: user, str: str});
+        }
+
+        // convoluted syntax to preserve the value of el
+        for(let el of document.getElementsByClassName("autocompleteItem"))
+        {
+            el.onclick = function(id)
+            {
+                return function()
+                {
+                    for(var u of results)
+                        if(u._id == id)
+                            setRecipient(u);
+                };
+            }(el.id.split("_")[1]);
+        }
+    });
+}
+
+function setRecipient(user)
+{
+    var nameBox = document.getElementById("mailRecipientName");
+    nameBox.innerHTML = "<h3>" + user.name + "</h3>";
+    nameBox.hidden = false;
+    document.getElementById("mailTopHalf").hidden = true;
+
+    var sendButton = document.getElementById("mailSendBtn");
+    sendButton.hidden = false;
+    sendButton.onclick = function()
+    {
+        sendMail(document.getElementById("mailMessageBox").value, user._id);
+    };
+}
+
+function sendMail(text, userid)
+{
+    $.post('/ajax/send-mail',
+    {
+        messageText : text,
+        recipientUserID : userid
+    }, function(res)
+    {
+        resetMail();
+        console.log(res);
+    });
+}
+
+function resetMail()
+{
+    document.getElementById("mailNameSearchBox").value = "";
+    document.getElementById("mailMessageBox").value = "";
+    document.getElementById("mailTopHalf").hidden = false;
+    document.getElementById("mailRecipientName").hidden = true;
+    document.getElementById("mailSearchResults").innerHTML= "";
+}
+
+function profilePic()
+{
+    var fileInput = document.getElementById("profilePictureInput");
+    fileInput.click();
+    var changeConfirm = confirm("This will change your profile photo. Continue?");
+    if (changeConfirm) {
+
+        var imgFile = fileInput.files[0];
+        var formData = new FormData();
+        //formData.append("profileImage", imgFile);
+
+        $.post("/ajax/upload-profile-picture", {image: imgFile}, function(res)
+        {
+            console.log(res);
+        });
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/ajax/upload-profile-picture",
+        //    data: {image: imgFile},
+        //    processData: false,
+        //    contentType: false,
+        //    success: function(response) {
+        //        location.reload();
+        //    },
+        //    error: function(jqXHR, textStatus, errorMessage) {
+        //        console.log(errorMessage);
+        //    }
+        //});
+    } else {
+    return false;
+    }
+}
 
 function postStatus()
 {
@@ -47,6 +200,7 @@ function postStatus()
         messageBody : document.getElementById("statusEntryField").value
     }, function(retData)
     {
+        document.getElementById("statusEntryField").value = "";
         populateFeed();
     }).fail(function(err)
     {
@@ -84,8 +238,6 @@ function populateFeed()
 
 function userLogin(){
 
-    // goHome();
-    // return true;
     var username = $("#userLoginName").val();
     var password = $("#userLoginPassword").val();
 
@@ -96,14 +248,7 @@ function userLogin(){
 		$("#loginFormAlert").addClass("alert-warning");
         $("#userLoginEmail").focus();
         return false;
-    } //else if (password == "") {
-    //    $("#loginFormAlert").html("<strong>Missing information: </strong>Please enter your password.");
-	//	$("#loginFormAlert").removeClass("hidden-xs-up");
-	//	$("#loginFormAlert").removeClass("alert-success");
-	//	$("#loginFormAlert").addClass("alert-warning");
-    //    $("#userLoginPassword").focus();
-    //    return false;
-    //}
+    }
     else {
         $("#loginFormAlert").addClass("hidden-xs-up");
         $.ajax({
@@ -171,14 +316,8 @@ function userRegistration() {
 		$("#signupFormAlert").addClass("alert-warning");
         $("#userEmail").focus();
         return false;
-    // } else if (password.trim() == "") {
-	// 	$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter a valid password. Your password should not consist of only spaces.");
-	// 	$("#signupFormAlert").removeClass("hidden-xs-up");
-	// 	$("#signupFormAlert").removeClass("alert-success");
-	// 	$("#signupFormAlert").addClass("alert-warning");
-    //     $("#userPassword").focus();
-    //     return false;
-    } else if (password.trim() !== confirmPass.trim()) {
+    }
+    else if (password.trim() !== confirmPass.trim()) {
 		$("#signupFormAlert").html("<strong>Missing information: </strong>Passwords do not match. Please check and try again.");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
 		$("#signupFormAlert").removeClass("alert-success");
@@ -191,35 +330,23 @@ function userRegistration() {
 
 	$("#signupFormAlert").addClass("hidden-xs-up");
 
-    $.ajax({
-        method: "post",
-        url: "/ajax/create-user",
-        // in quotes because https://stackoverflow.com/questions/40734625/ajax-post-showing-an-error-when-try-to-upgrade-jquery-version
-        dataType: 'JSON',
-        data: formData,
-        success: function(response) {
-            console.log("++++++++++++++++++++++++++++++++++++");
+    $.post("/ajax/create-user", formData, function(res)
+    {
+        console.log(res);
 
-            if (response) {
-                // For now just returning a string with either success or an error msg
-                // var obj = JSON.parse(response);
-                console.log(response); // For now at least - Jon
-            }
-            showSuccessPrompt();
-            return true;
+        if(res == "SUCCESS") showSuccessPrompt();
+        else if(res == "username already registered")
+        {
+            $("#signupFormAlert").html("<strong>Missing information: </strong>Username has already been taken. Please try another username.");
+            $("#signupFormAlert").removeClass("hidden-xs-up");
+            $("#signupFormAlert").removeClass("alert-success");
+            $("#signupFormAlert").addClass("alert-warning");
+            $("#userPassword").focus();
+            return false;
         }
     });
+
 }
-
-// Don't need this if we're not using email addresses
-
-// function validateEmail(email) {
-//     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
-//         return (true)
-//     } else {
-//         return false;
-//     }
-// }
 
 function showActivity(label) {
 
@@ -290,21 +417,61 @@ function showMessages(label) {
 
 }
 
-// function goHome() {
-//     location.assign("index.html");
-// }
-
-// function goOffline() {
-//     location.assign("login.html");
-// }
-
 function showSuccessPrompt() {
 
     $("#signupForm").fadeOut("slow", function() {
 
         $("#signupModal .modal-footer").attr("hidden",true);
         $("#successPrompt").attr("hidden", false).fadeIn("slow");
+    });
+}
 
+
+function checkFontSize() {
+
+    $.ajax({
+
+        type: "GET",
+        url: "/ajax/get-font-size",
+        success: function(size) {
+            switch (size) {
+
+                case "125":
+                $("body").addClass("font-rg");
+                break;
+
+                case "150":
+                $("body").addClass("font-lg");
+                break;
+
+                case "175":
+                $("body").addClass("font-xl");
+                break;
+
+                case "200":
+                $("body").addClass("font-xxl");
+                break;
+
+                default:
+                $("body").addClass("font-rg");
+                break;
+
+            }
+        }
+    });
+}
+
+function setFontSize(size) {
+
+    $.ajax({
+
+        type: "POST",
+        url: "/ajax/set-font-size",
+        data: { fontSize: size },
+        dataType: "json",
+        success: function(response) {
+            location.reload();
+        }
     });
 }
 

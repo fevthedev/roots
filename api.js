@@ -1,6 +1,7 @@
 //api.js
 
 var as = require('async');
+var ObjectID = require('mongodb').ObjectID;
 //var tools  = require('./tools.js');
 
 module.exports = function(app, db)
@@ -68,15 +69,6 @@ module.exports = function(app, db)
             },
             function(callback)
             {
-                // // add username/ password combination into login collection in db
-                // db.login.insert({username : userData.username, password: userData.usrPass}, function(err, result)
-                // {
-                //     if(err) callback(err);
-                // });
-
-                // // remove password from user object, we don't want to store it anywhere
-                // delete userData.usrPass;
-
                 delete userData.userPasswordConfirm;
 
                 // rename fields
@@ -89,6 +81,9 @@ module.exports = function(app, db)
                 delete userData.userFullName;
                 delete userData.userPassword;
 
+                // initialize mail
+                userData.mail     = [];
+
                 // add user to collection of users in db
                 db.users.insert(userData, function(err, user)
                 {
@@ -96,7 +91,7 @@ module.exports = function(app, db)
 
                     // log the new user in and return
                     req.session.user = user.ops[0];
-                    return res.status(200).send(null);
+                    return res.status(200).send("SUCCESS");
                 });
             }
         ],
@@ -104,6 +99,19 @@ module.exports = function(app, db)
         {
             console.error(err);
             return res.status(500).send("Error creating your account");
+        });
+    });
+
+    app.post('/ajax/upload-profile-picture', function(req, res)
+    {
+        db.profilePictures.insert(req.body.image, function(err, result)
+        {
+            db.users.update
+            (
+                {username: req.user.username},
+                {$set: {profilePicture: result.insertedIds[0]}},
+                function(){return res.status(200).send(null);}
+            );
         });
     });
 
@@ -138,6 +146,59 @@ module.exports = function(app, db)
         });
     });
 
+    app.post('/ajax/search-by-name', function(req, res)
+    {
+        var str = req.body.search;
+        db.users.find({name: {$regex: str, $options: "i"}}).toArray(function(err, arr)
+        {
+            return res.status(200).send(arr.slice(0, 5));
+        });
+    });
+
+    app.post('/ajax/send-mail', function(req, res)
+    {
+        var message =
+        {
+            sender :
+            {
+                name: req.user.name,
+                id  : req.user._id
+            },
+            timestamp : new Date().getTime(),
+            message   : req.body.messageText,
+            id        : new ObjectID()
+        };
+
+        db.users.update({_id: ObjectID(req.body.recipientUserID)}, {$push: {mail: message}}, null);
+        return res.status(200).send(null);
+    });
+
+    //app.post("/ajax/delete-message", function(req, res)
+    //{
+    //    db.users.update({username: req.user.username}, {$pull: {mail: {message: "qwertuiop"}}}, {multi: true}, function(err, count, obj)
+    //    {
+    //        console.log();
+    //    });
+    //});
+
+    app.get("/ajax/get-font-size", function(req, res)
+    {
+        db.users.findOne({username: req.user.username}, function(err, user)
+        {
+            return res.status(200).send(user.fontSize);
+        });
+    });
+
+    app.post("/ajax/set-font-size", function(req, res)
+    {
+        db.users.update({username: req.user.username}, {$set: {fontSize: req.body.fontSize}}, function(err)
+        {
+            if(err) return res.status(500).send("Error " + err);
+
+            return res.status(200).send(JSON.stringify({success: true}));
+        });
+    });
+
     app.post('/test/get-user-info', function(req, res)
     {
         db.login.findOne({username : req.user.username}, function(err, result)
@@ -151,3 +212,4 @@ module.exports = function(app, db)
         });
     });
 };
+

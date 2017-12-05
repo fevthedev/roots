@@ -1,23 +1,57 @@
 //main.js
 
+
+/*
+ * ================================================================================
+ *                                                                                *
+ * This is the file that Node reads first. It sets up Express, Handlebars, Mongo, *
+ * session cookies, and some tools for asynchronous programming.                  *
+ *                                                                                *
+ * Express:                                                                       *
+ *     HTTP server which allows us to set up some HTTP endpoints with some        *
+ *     middleware                                                                 *
+ *                                                                                *
+ * Handlebars:                                                                    *
+ *     Templating engine. .hbs files are html with logic contained in curly       *
+ *     braces. We compile them to html on the server using the expres-handlebars  *
+ *     npm package.                                                               *
+ *                                                                                *
+ * Mongo:                                                                         *
+ *     No-SQL database, holds data in JSON-like format (we interact with it using *
+ *     JSON                                                                       *
+ *                                                                                *
+ * Session cookies:                                                               *
+ *     Sessions are taken care of by the client-sessions package; the session     *
+ *     cookie is encrypted with SECRET_KEY , defined below.                       *
+ *                                                                                *
+ * Async package:                                                                 *
+ *     Tools for asynchronous programming,                                        *
+ *     see https://caolan.github.io/async/docs.                                   *
+ * ================================================================================
+ * */
+
+
+
+
+// The port that the server runs on, stored in config.js
 const PORT = require('./config.js').portnumber;
 
 // ### SETUP
 
-var express    = require('express');         // HTTP/ routing/ web server
-var exphbs     = require('express-handlebars');
-var mongodb    = require('mongodb');         // NoSQL database (JSON-like)
-var bodyParser = require('body-parser');     // for parsing data from client
-var session    = require('client-sessions'); // cookies/ user accounts
-var fs         = require('fs');              // local file system (might not be necessary)
-var as         = require('async');           // makes asynchronous code less of a pain
-// var tools = require('./tools.js');
+var express    = require('express');            // HTTP/ routing/ web server
+var exphbs     = require('express-handlebars'); // lets us use res.render to render our hbs templates
+var mongodb    = require('mongodb');            // NoSQL database (JSON-like)
+var bodyParser = require('body-parser');        // for parsing data from client
+var session    = require('client-sessions');    // cookies/ user accounts
+var as         = require('async');              // makes asynchronous code less of a pain
 
 // secret key for encrypting cookies
-const secretKey = "CGgnvg2$zc#!Kz2EVh8GZTkNpaxj!5HE";
+const SECRET_KEY = "CGgnvg2$zc#!Kz2EVh8GZTkNpaxj!5HE";
 
+// Create Handlebars object
 var hbs = exphbs.create
 ({
+    // Some helpers we can use in our .hbs templates
     helpers:
     {
         sep: function()
@@ -97,19 +131,12 @@ app.set('view engine', 'hbs');
 app.use(express.static(__dirname + "/resources")); // all resources in resources folder
 app.use(bodyParser()); // so we can parse data from client using req.body
 
-//var allowCrossDomain = function (req, res, next)
-//{
-//    console.log("allowing...");
-//    res.header('Access-Control-Allow-Origin ', '*');
-//    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//    res.header('Access-Control-Allow-Headers', 'Content-Type');
-//    next();
-//};
 
 // ### MONGO INIT
 
 var db = {};
 
+// Connect to the database and add the collections to our local object
 mongodb.connect('mongodb://localhost:27017/roots', function(error, database)
 {
     if(error)
@@ -119,7 +146,6 @@ mongodb.connect('mongodb://localhost:27017/roots', function(error, database)
 
     db.users = database.collection('users');
     db.posts = database.collection('posts');
-    db.profilePictures = database.collection('profile-pictures');
 
     console.log("Connected to database");
 
@@ -138,7 +164,7 @@ app.use
     session
     ({
       cookieName: 'session',
-      secret: secretKey,
+      secret: SECRET_KEY,
       duration: 5 * 60 * 60 * 1000,      // 5 hours
       activeDuration: 1 * 60 * 60 * 1000 // 1 hour
     })
@@ -196,3 +222,4 @@ var server = app.listen(PORT, function()
 {
     console.log('Listening on port %d', server.address().port);
 });
+

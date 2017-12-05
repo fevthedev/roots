@@ -52,15 +52,7 @@
             <div class="row">
 
                 <div class="col-12 col-md-4" id="profileHeader">
-                    <!-- profile img with 5px border -->
-                    {{!--<img class="img-fluid" src="/images/profileplaceholder.png"/>--}}
-                    <!-- user name and status with edit link -->
-
                     <div class="col py-3">
-                        {{!--<form id="profilePicForm" action="/ajax/upload-profile-picture" enctype='multipart/form-data' method='POST'>
-                            <input type="file" id="profilePictureInput" accept="image/*" hidden></input>
-                        </form>
-                        <button class="btn btn-success" id="changeProfilePicBtn">Change profile picture</button>--}}
                         <h3 id="profileNameDisplay">{{user.name}}</h3>
                     </div>
                 </div>
@@ -84,10 +76,8 @@
                     <div class="row">
                         <div class="col-12">
                             <ul class="my-0" id="profileTabs">
-                                <!-- Activity / Photos / Events -->
+                                <!-- Feed / Mail -->
                                 <li class="tabLabel text-muted" id="profileTabActivity">News Feed</li>
-                                {{!--<li class="tabLabel text-muted" id="profileTabPhotos">Photos</li>
-                                <li class="tabLabel text-muted" id="profileTabEvents">Events</li>--}}
                                 <li class="tabLabel text-muted" id="profileTabMail">Mail</li>
                             </ul>
                         </div>
@@ -95,69 +85,12 @@
 
                     <div class="col-12 px-3" id="profileContent">
 
+                        <!-- Feed -->
                         <div class="row contentItem" id="profileActivityContent">
                             <div id="feed" class="col-12"></div>
                         </div>
 
-                        <div class="row contentItem" id="profilePhotosContent" hidden>
-                            <div class="col-12">
-                                <h3 class="my-3">Gallery</h3>
-                                <ul class="list-inline" id="galleryList">
-                                    <li class="list-inline-item">
-                                        <img src="/images/gallery1holder.png" class="img-fluid"/>
-                                        <p class="imgTitle text-center py-2">Landscapes</p>
-                                    </li>
-
-                                    <li class="list-inline-item">
-                                        <img src="/images/gallery2holder.png" class="img-fluid"/>
-                                        <p class="imgTitle text-center py-2">Monsters</p>
-                                    </li>
-
-                                    <li class="list-inline-item">
-                                        <img src="/images/gallery3holder.png" class="img-fluid"/>
-                                        <p class="imgTitle text-center py-2">Wild Life</p>
-                                    </li>
-
-                                    <li class="list-inline-item">
-                                        <img src="/images/gallery4holder.png" class="img-fluid"/>
-                                        <p class="imgTitle text-center py-2">Rides</p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="row contentItem" id="profileEventContent" hidden>
-                            <div class="col-12">
-                                <h3 class="my-3">Current Events</h3>
-                                <ul id="eventList">
-
-                                    <li class="eventListItem p-3 mb-3">
-                                        <span class="eventNameContent">Point Pleasant Lunch</span>
-                                        <span class="eventTimeContent float-right">4:00 PM</span>
-                                        <p class="interestOption py-2 m-0 text-left">
-                                            <button class="btn btn-small btn-success interestedBtn">
-                                                <span class="eventInterestStar"><img src="/images/unselectedgold.png" width="30" height="30" /> </span>
-                                                <span class="eventInterestNotice">Interested</span>
-                                            </button>
-                                            <span class="interestCount ml-3">16 people interested.</span>
-                                        </p>
-                                    </li>
-
-                                    <li class="eventListItem p-3 mb-3">
-                                        <span class="eventNameContent">Crib with Pam</span>
-                                        <span class="eventTimeContent float-right">6:30 PM</span>
-                                        <p class="interestOption py-2 m-0 text-left">
-                                            <button class="btn btn-small btn-success interestedBtn">
-                                                <span class="eventInterestStar"><img src="/images/unselectedgold.png" width="30" height="30" /> </span>
-                                                <span class="eventInterestNotice">Interested</span>
-                                            </button>
-                                            <span class="interestCount ml-3">16 people interested.</span>
-                                        </p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
+                        <!-- Mail -->
                         <div class="row contentItem" id="profileMailContent" hidden>
                             <div class="col-12">
                                 <button class="btn btn-roots float-right" style="margin-top:10px" data-toggle="modal" data-target="#sendMail">New Message</button>
@@ -203,7 +136,6 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="mailDismiss_{{this.id}}" class="btn btn-secondary dismiss-btn" data-dismiss="modal">Dismiss</button>
-                            {{!--<button type="button" id="mailDelete_{{this.id}}" class="btn btn-secondary delete-btn" data-dismiss="modal">Delete</button>--}}
                             <button type="button" id="mailReply_{{this.id}}_{{this.sender.id}}" class="btn btn-success reply-btn"  data-dismiss="modal">Reply
                             </button>
                         </div>
@@ -249,5 +181,5 @@
             <p class="text-center m-0">Roots 2017 &copy;&nbsp;All rights reserved.</p>
         </footer>
     </div>
-
 </div>
+

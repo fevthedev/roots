@@ -1,8 +1,16 @@
+//home.js
+
+// This contains all the client-side js for the application
+
+// Some templates that are compiled on the spot with asynchronous data
 var post_template = require("./templates/post.hbs");
 var autocomplete_template = require("./templates/autocomplete.hbs");
 
+// Tool to allow client-sde rendering of hbs. This file is compiled using hbsfy and stored in
+// /resources/scripts/compiled/home.js
 var Handlebars = require("hbsfy/runtime");
 
+// Human readable timestamp from UNIX timestamp
 Handlebars.registerHelper('time', function(value, options)
 {
     var a = (new Date(value) + "").split(" ");
@@ -10,43 +18,18 @@ Handlebars.registerHelper('time', function(value, options)
     return a[0] + ", " + a[1] + " " + a[2] + ", " + a[3] + " at " + ((t[0]==0)?12:t[0]%12) + ":" + t[1] + " " + ((t[0] >= 12)?"pm":"am");
 });
 
+// Match regex in string and surround it with <b></b>
 Handlebars.registerHelper('boldify', function(string, regex, options)
 {
     return string.replace(new RegExp('(' + regex + ')', 'i'), "<b>$1</b>");
 });
 
+// When the page loads, this is executed
 $(function() {
-
     populateFeed();
     checkFontSize();
 
-    $(".feedItem").click(function(){
-
-        //location.assign("templates/profile.html");
-
-    });
-
-    $("#siteLogo").click(function(){
-
-        //location.assign("/index.html");
-
-    });
-
-    $(".interestedBtn").click(function(){
-
-        if ($(this).hasClass("interested")) {
-
-            $(this).removeClass("interested");
-            $("img",this).attr("src", "/images/unselectedgold.png");
-
-        } else {
-
-            $(this).addClass("interested");
-            $("img",this).attr("src", "/images/interestedgold.png");
-
-        }
-    });
-
+    // Add functionality to mail reply buttons
     // convoluted syntax to preserve value of el
     for(let el of document.getElementsByClassName("reply-btn"))
     {
@@ -59,23 +42,7 @@ $(function() {
         }(el.id.split("_")[1], el.id.split("_")[2]);
     }
 
-    //for(let el of document.getElementsByClassName("delete-btn"))
-    //{
-    //    el.onclick = function(messageid)
-    //    {
-    //        return function()
-    //        {
-    //            document.getElementById("mailLi_" + messageid).outerHTML = "";
-    //            document.getElementById("mailItem_" + messageid).outerHTML = "";
-    //            $.post("/ajax/delete-message", {id: messageid}, function(res)
-    //            {
-    //                //...
-    //            });
-    //        };
-    //    }(el.id.split("_")[1]);
-    //}
-
-
+    // Set up event listeners
     $("#font125").click(function(){setFontSize(125);});
     $("#font150").click(function(){setFontSize(150);});
     $("#font175").click(function(){setFontSize(175);});
@@ -91,96 +58,10 @@ $(function() {
     $("#changeProfilePicBtn").click(profilePic);
     $("#mailCancelBtn").click(resetMail);
     $("#mailNameSearchBox").on('keyup', mailAutoComplete);
-
-    var weather = "";
-    var videoStream = "";
-    var imageStream = "";
-    var cityID = 6324729;   //Halifax city ID retrieved from /resources/city.list.json
-    var apiKEY = "004f5ffc66ae8f85f79056c030b21265";
-    var apiURL = "http://api.openweathermap.org?id=" + cityID + "&APPID=" + apiKEY;
-
-
-    //if (weatherTimeCheck()) {
-    //    var xhr = createCORSRequest('GET', apiURL);
-    //    if (!xhr) {
-    //        alert("NO CORS");
-    //    } else {
-    //        // Response handlers.
-    //        xhr.onload = function() {
-    //            var obj = JSON.parse(xhr.responseText);
-    //            weather = (obj.weather[0].main).toLowerCase();
-    //            document.cookie = "weatherstate=" + weather;
-
-    //            switch (weather) {
-    //                case "Fog":
-    //                videoStream = "http://mrfevrier.com/mediastore/video/fog.mp4";
-    //                imageStream = "http://mrfevrier.com/mediastore/image/fog.png";
-    //                break;
-
-    //                case "Rain":
-    //                videoStream = "http://mrfevrier.com/mediastore/video/rain.mp4";
-    //                imageStream = "http://mrfevrier.com/mediastore/image/rain.png";
-    //                break;
-
-    //                case "Snow":
-    //                videoStream = "http://mrfevrier.com/mediastore/video/snow.mp4";
-    //                imageStream = "http://mrfevrier.com/mediastore/image/snow.png";
-    //                break;
-
-    //                case "Clear":
-    //                videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
-    //                imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
-    //                break;
-
-    //                default:
-    //                videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
-    //                imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
-    //                break;
-    //            }
-    //        };
-
-    //        xhr.onerror = function() {
-    //            alert('Woops, there was an error making the request.');
-    //        };
-
-    //        xhr.send();
-    //    }
-
-    //} else {
-    //    var state = getCookieValue("weatherstate");
-
-    //    if (state != "" && state != null) {
-    //        videoStream = "http://mrfevrier.com/mediastore/video/" + state + ".mp4";
-    //        imageStream = "http://mrfevrier.com/mediastore/image/" + state + ".png";
-    //    } else {
-    //        videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
-    //        imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
-    //    }
-
-    //}
-
-    //$("#bgvid").css("background","url('resources/images/" + weather.toLowerCase() + ".png') no-repeat");
-    //$("#bgvid").attr("poster", imageStream);
-    //$("#bgvid source").attr("src", videoStream);
 });
 
-// Create the XHR object.
-function createCORSRequest(method, url) {
-    var xhr = new XMLHttpRequest();
-    if ("withCredentials" in xhr) {
-        // XHR for Chrome/Firefox/Opera/Safari.
-        xhr.open(method, url, true);
-    } else if (typeof XDomainRequest != "undefined") {
-        // XDomainRequest for IE.
-        xhr = new XDomainRequest();
-        xhr.open(method, url);
-    } else {
-        // CORS not supported.
-        xhr = null;
-    }
-    return xhr;
-}
-
+// Called when a user types into the search box, sends what they typed to the /search-by-name
+// endpoint on the server and modifies the page accordingly
 function mailAutoComplete()
 {
     var str = document.getElementById("mailNameSearchBox").value;
@@ -191,6 +72,7 @@ function mailAutoComplete()
         resultsDiv.innerHTML = "";
         for(var user of results)
         {
+            // Lists off the matching names, with regex match bolded
             resultsDiv.innerHTML += autocomplete_template({user: user, str: str});
         }
 
@@ -210,13 +92,19 @@ function mailAutoComplete()
     });
 }
 
+// Sets environment for sending mail to a user
 function setRecipient(user)
 {
     var nameBox = document.getElementById("mailRecipientName");
+
+    // Have the name of the recipient at the top
     nameBox.innerHTML = "<h3>" + user.name + "</h3>";
+
+    // Switch the top half from searching for a name to writing a message
     nameBox.hidden = false;
     document.getElementById("mailTopHalf").hidden = true;
 
+    // Show send button and set it to send the message when it's clicked
     var sendButton = document.getElementById("mailSendBtn");
     sendButton.hidden = false;
     sendButton.onclick = function()
@@ -225,6 +113,7 @@ function setRecipient(user)
     };
 }
 
+// Send mail by posting it to the server
 function sendMail(text, userid)
 {
     $.post('/ajax/send-mail',
@@ -238,6 +127,7 @@ function sendMail(text, userid)
     });
 }
 
+// Reset the mail environment
 function resetMail()
 {
     document.getElementById("mailNameSearchBox").value = "";
@@ -247,43 +137,7 @@ function resetMail()
     document.getElementById("mailSearchResults").innerHTML= "";
 }
 
-function profilePic()
-{
-    var fileInput = document.getElementById("profilePictureInput");
-    fileInput.click();
-    var changeConfirm = confirm("This will change your profile photo. Continue?");
-    if (changeConfirm) {
-
-        $("#profilePicForm").submit();
-        //location.reload();
-
-        //var imgFile = fileInput.files[0];
-        //var formData = new FormData();
-        //formData.append("profileImage", imgFile);
-
-        //$.post("/ajax/upload-profile-picture", {image: imgFile}, function(res)
-        //{
-        //    console.log(res);
-        //});
-
-        //$.ajax({
-        //    type: "POST",
-        //    url: "/ajax/upload-profile-picture",
-        //    data: formData,
-        //    processData: false,
-        //    contentType: false,
-        //    success: function(response) {
-        //        location.reload();
-        //    },
-        //    error: function(jqXHR, textStatus, errorMessage) {
-        //        console.log(errorMessage);
-        //    }
-        //});
-    } else {
-    return false;
-    }
-}
-
+// Create a new post by sending it to the server
 function postStatus()
 {
     $.post("/ajax/new-post",
@@ -300,6 +154,7 @@ function postStatus()
     });
 }
 
+// Get posts from the server and add them to the feed
 function populateFeed()
 {
     var feed;
@@ -327,6 +182,7 @@ function populateFeed()
     });
 }
 
+// Log a user in
 function userLogin(){
 
     var username = $("#userLoginName").val();
@@ -364,10 +220,9 @@ function userLogin(){
             }
         });
     }
-
-
 }
 
+// Log the user out
 function logout()
 {
     $.ajax({
@@ -567,59 +422,5 @@ function setFontSize(size) {
 }
 
 
-function weatherTimeCheck() {
-    var found = false;
-    var cookieValue = 0;
-    var cookies = document.cookie;
-
-    if (cookies != "") {
-        var cookieList = cookies.split(";");
-
-        for (var i=0; i<cookieList.length; i++) {
-            var splitCookie = cookieList[i].split("=");
-            var cookieName = splitCookie[0].replace(" ","");
-
-            if (cookieName === "timecheck") {
-                cookieValue = splitCookie[1];
-                //alert(cookieValue);
-                found = true;
-            }
-        }
-    }
-
-    if (!found) {
-        var checkTime = new Date().getTime();
-        var weatherCheckTimeCookie = "timecheck=" + checkTime;
-        document.cookie = weatherCheckTimeCookie;
-        return true;
-    } else {
-        var newTime = new Date().getTime();
-        var timeVariance = 20 * 60 * 1000; // 20 minutes
-
-        if ((newTime - cookieValue) > timeVariance) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
-
-function getCookieValue(cookieName) {
-    var cookies = document.cookie;
-
-    if (cookies != "") {
-        var cookieList = cookies.split(";");
-
-        for (var i=0; i<cookieList.length; i++) {
-            var cookie = cookieList[i];
-            var cookieSplit = cookie.split("=");
-            var name = cookieSplit[0].replace(" ","");
-
-            if (name == cookieName) {
-                return cookieSplit[1];
-            }
-        }
-    }
-}
 
 

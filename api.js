@@ -1,18 +1,15 @@
 //api.js
 
+// This file is the guts of the application server.
+// The client send ajax requests here, and we operate on the database and/or
+// send data back to the client.
+
 var as = require('async');
 var ObjectID = require('mongodb').ObjectID;
-//var tools  = require('./tools.js');
 
 module.exports = function(app, db)
 {
-    app.post('/hook', function(req, res)
-    {
-        console.log("\nWEBHOOK RECEIVED\n");
-        require('child_process').spawn('git', ['pull']);
-        return res.status(200).send("thanks!");
-    });
-
+    // Sends all the posts to the client
     app.get('/ajax/get-posts', function(req, res)
     {
         db.posts.find().toArray(function(err, arr)
@@ -23,6 +20,7 @@ module.exports = function(app, db)
         });
     });
 
+    // Logs a user in
     app.post('/ajax/login', function(req, res)
     {
         db.users.findOne({username : req.body.usrLoginName}, function(err, user)
@@ -33,6 +31,7 @@ module.exports = function(app, db)
             if(!user || user.password != req.body.usrPass) return res.status(200).send((JSON.stringify({error: "Invalid username or password"})));
             else
             {
+                // Remove the password field from the object
                 delete user.password;
                 req.session.user = user;
                 return res.status(200).send(JSON.stringify("SUCCESS"));
@@ -40,16 +39,16 @@ module.exports = function(app, db)
         });
     });
 
+    // Log the user out by restting the session
     app.get('/ajax/logout', function(req, res)
     {
         req.session.reset(); // log the user out by resetting the session
         res.redirect('/');   // redirect to /
     });
 
+    // Create a new user wth provided information
     app.post('/ajax/create-user', function(req, res)
     {
-        // return res.status(200).send(req.body);
-
         // parse the data from the request body
         var userData = req.body;
 
@@ -82,7 +81,7 @@ module.exports = function(app, db)
                 delete userData.userPassword;
 
                 // initialize mail
-                userData.mail     = [];
+                userData.mail = [];
 
                 // add user to collection of users in db
                 db.users.insert(userData, function(err, user)
@@ -102,28 +101,19 @@ module.exports = function(app, db)
         });
     });
 
-    app.post('/ajax/upload-profile-picture', function(req, res)
-    {
-        db.profilePictures.insert(req.body.image, function(err, result)
-        {
-            db.users.update
-            (
-                {username: req.user.username},
-                {$set: {profilePicture: result.insertedIds[0]}},
-                function(){return res.status(200).send(null);}
-            );
-        });
-    });
-
+    // Returns the user's messages
     app.get('/ajax/user-messages', function(req, res)
     {
         return res.status(200).send(req.user.messages);
     });
 
+    // Add a new post
     app.post('/ajax/new-post', function(req, res)
     {
+        // Parse the object
         post = req.body;
 
+        // Add the post with the user's info
         db.users.findOne({username : req.user.username}, function(err, result)
         {
             if(err)
@@ -146,6 +136,7 @@ module.exports = function(app, db)
         });
     });
 
+    // Search users for names matching given regex
     app.post('/ajax/search-by-name', function(req, res)
     {
         var str = req.body.search;
@@ -155,8 +146,10 @@ module.exports = function(app, db)
         });
     });
 
+    // Send mail to another user
     app.post('/ajax/send-mail', function(req, res)
     {
+        // Create the mnessage object
         var message =
         {
             sender :
@@ -173,14 +166,7 @@ module.exports = function(app, db)
         return res.status(200).send(null);
     });
 
-    //app.post("/ajax/delete-message", function(req, res)
-    //{
-    //    db.users.update({username: req.user.username}, {$pull: {mail: {message: "qwertuiop"}}}, {multi: true}, function(err, count, obj)
-    //    {
-    //        console.log();
-    //    });
-    //});
-
+    // Get the font size associated with the current user
     app.get("/ajax/get-font-size", function(req, res)
     {
         db.users.findOne({username: req.user.username}, function(err, user)
@@ -189,6 +175,7 @@ module.exports = function(app, db)
         });
     });
 
+    // Set the user's preferred font size
     app.post("/ajax/set-font-size", function(req, res)
     {
         db.users.update({username: req.user.username}, {$set: {fontSize: req.body.fontSize}}, function(err)
@@ -196,19 +183,6 @@ module.exports = function(app, db)
             if(err) return res.status(500).send("Error " + err);
 
             return res.status(200).send(JSON.stringify({success: true}));
-        });
-    });
-
-    app.post('/test/get-user-info', function(req, res)
-    {
-        db.login.findOne({username : req.user.username}, function(err, result)
-        {
-            if(err)
-            {
-                return res.status(500).send("Sorry, an error occurred");
-            }
-
-            return result;
         });
     });
 };

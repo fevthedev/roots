@@ -62,7 +62,7 @@ module.exports = function(app, db)
                 {
                     if(result)
                     {
-                        return res.status(200).send("username already registered");
+                        return res.status(400).send("username already registered");
                     }
                     else callback(null);
                 });

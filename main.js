@@ -97,6 +97,15 @@ app.set('view engine', 'hbs');
 app.use(express.static(__dirname + "/resources")); // all resources in resources folder
 app.use(bodyParser()); // so we can parse data from client using req.body
 
+//var allowCrossDomain = function (req, res, next)
+//{
+//    console.log("allowing...");
+//    res.header('Access-Control-Allow-Origin ', '*');
+//    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//    res.header('Access-Control-Allow-Headers', 'Content-Type');
+//    next();
+//};
+
 // ### MONGO INIT
 
 var db = {};

@@ -14,6 +14,11 @@ module.exports = function(app, db)
         }
         else return res.status(200).render('login');
     });
+
+    app.get('/help', function(req, res)
+    {
+        return res.status(200).sendfile("UserTutorial.htm");
+    });
 };
 
 function requireLogin(req, res, next)

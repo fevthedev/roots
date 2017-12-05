@@ -1140,7 +1140,7 @@ Handlebars.registerHelper('time', function(value, options)
 {
     var a = (new Date(value) + "").split(" ");
     var t = a[4].split(":");
-    return a[0] + ", " + a[1] + " " + a[2] + ", " + a[3] + " at " + ((t[0]==0)?12:t[0]%12) + ":" + t[1] + " " + ((t[0]/12)?"pm":"am");
+    return a[0] + ", " + a[1] + " " + a[2] + ", " + a[3] + " at " + ((t[0]==0)?12:t[0]%12) + ":" + t[1] + " " + ((t[0] >= 12)?"pm":"am");
 });
 
 Handlebars.registerHelper('boldify', function(string, regex, options)
@@ -1224,7 +1224,95 @@ $(function() {
     $("#changeProfilePicBtn").click(profilePic);
     $("#mailCancelBtn").click(resetMail);
     $("#mailNameSearchBox").on('keyup', mailAutoComplete);
+
+    var weather = "";
+    var videoStream = "";
+    var imageStream = "";
+    var cityID = 6324729;   //Halifax city ID retrieved from /resources/city.list.json
+    var apiKEY = "004f5ffc66ae8f85f79056c030b21265";
+    var apiURL = "http://api.openweathermap.org?id=" + cityID + "&APPID=" + apiKEY;
+
+
+    //if (weatherTimeCheck()) {
+    //    var xhr = createCORSRequest('GET', apiURL);
+    //    if (!xhr) {
+    //        alert("NO CORS");
+    //    } else {
+    //        // Response handlers.
+    //        xhr.onload = function() {
+    //            var obj = JSON.parse(xhr.responseText);
+    //            weather = (obj.weather[0].main).toLowerCase();
+    //            document.cookie = "weatherstate=" + weather;
+
+    //            switch (weather) {
+    //                case "Fog":
+    //                videoStream = "http://mrfevrier.com/mediastore/video/fog.mp4";
+    //                imageStream = "http://mrfevrier.com/mediastore/image/fog.png";
+    //                break;
+
+    //                case "Rain":
+    //                videoStream = "http://mrfevrier.com/mediastore/video/rain.mp4";
+    //                imageStream = "http://mrfevrier.com/mediastore/image/rain.png";
+    //                break;
+
+    //                case "Snow":
+    //                videoStream = "http://mrfevrier.com/mediastore/video/snow.mp4";
+    //                imageStream = "http://mrfevrier.com/mediastore/image/snow.png";
+    //                break;
+
+    //                case "Clear":
+    //                videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
+    //                imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
+    //                break;
+
+    //                default:
+    //                videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
+    //                imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
+    //                break;
+    //            }
+    //        };
+
+    //        xhr.onerror = function() {
+    //            alert('Woops, there was an error making the request.');
+    //        };
+
+    //        xhr.send();
+    //    }
+
+    //} else {
+    //    var state = getCookieValue("weatherstate");
+
+    //    if (state != "" && state != null) {
+    //        videoStream = "http://mrfevrier.com/mediastore/video/" + state + ".mp4";
+    //        imageStream = "http://mrfevrier.com/mediastore/image/" + state + ".png";
+    //    } else {
+    //        videoStream = "http://mrfevrier.com/mediastore/video/clear.mp4";
+    //        imageStream = "http://mrfevrier.com/mediastore/image/clear.png";
+    //    }
+
+    //}
+
+    //$("#bgvid").css("background","url('resources/images/" + weather.toLowerCase() + ".png') no-repeat");
+    //$("#bgvid").attr("poster", imageStream);
+    //$("#bgvid source").attr("src", videoStream);
 });
+
+// Create the XHR object.
+function createCORSRequest(method, url) {
+    var xhr = new XMLHttpRequest();
+    if ("withCredentials" in xhr) {
+        // XHR for Chrome/Firefox/Opera/Safari.
+        xhr.open(method, url, true);
+    } else if (typeof XDomainRequest != "undefined") {
+        // XDomainRequest for IE.
+        xhr = new XDomainRequest();
+        xhr.open(method, url);
+    } else {
+        // CORS not supported.
+        xhr = null;
+    }
+    return xhr;
+}
 
 function mailAutoComplete()
 {
@@ -1299,19 +1387,22 @@ function profilePic()
     var changeConfirm = confirm("This will change your profile photo. Continue?");
     if (changeConfirm) {
 
-        var imgFile = fileInput.files[0];
-        var formData = new FormData();
+        $("#profilePicForm").submit();
+        //location.reload();
+
+        //var imgFile = fileInput.files[0];
+        //var formData = new FormData();
         //formData.append("profileImage", imgFile);
 
-        $.post("/ajax/upload-profile-picture", {image: imgFile}, function(res)
-        {
-            console.log(res);
-        });
+        //$.post("/ajax/upload-profile-picture", {image: imgFile}, function(res)
+        //{
+        //    console.log(res);
+        //});
 
         //$.ajax({
         //    type: "POST",
         //    url: "/ajax/upload-profile-picture",
-        //    data: {image: imgFile},
+        //    data: formData,
         //    processData: false,
         //    contentType: false,
         //    success: function(response) {
@@ -1470,7 +1561,7 @@ function userRegistration() {
         if(res == "SUCCESS") showSuccessPrompt();
         else if(res == "username already registered")
         {
-            $("#signupFormAlert").html("<strong>Missing information: </strong>Username has already been taken. Please try another username.");
+            $("#signupFormAlert").html("Username has already been taken. Please try another username.");
             $("#signupFormAlert").removeClass("hidden-xs-up");
             $("#signupFormAlert").removeClass("alert-success");
             $("#signupFormAlert").addClass("alert-warning");
@@ -1607,6 +1698,63 @@ function setFontSize(size) {
         }
     });
 }
+
+
+function weatherTimeCheck() {
+    var found = false;
+    var cookieValue = 0;
+    var cookies = document.cookie;
+
+    if (cookies != "") {
+        var cookieList = cookies.split(";");
+
+        for (var i=0; i<cookieList.length; i++) {
+            var splitCookie = cookieList[i].split("=");
+            var cookieName = splitCookie[0].replace(" ","");
+
+            if (cookieName === "timecheck") {
+                cookieValue = splitCookie[1];
+                //alert(cookieValue);
+                found = true;
+            }
+        }
+    }
+
+    if (!found) {
+        var checkTime = new Date().getTime();
+        var weatherCheckTimeCookie = "timecheck=" + checkTime;
+        document.cookie = weatherCheckTimeCookie;
+        return true;
+    } else {
+        var newTime = new Date().getTime();
+        var timeVariance = 20 * 60 * 1000; // 20 minutes
+
+        if ((newTime - cookieValue) > timeVariance) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function getCookieValue(cookieName) {
+    var cookies = document.cookie;
+
+    if (cookies != "") {
+        var cookieList = cookies.split(";");
+
+        for (var i=0; i<cookieList.length; i++) {
+            var cookie = cookieList[i];
+            var cookieSplit = cookie.split("=");
+            var name = cookieSplit[0].replace(" ","");
+
+            if (name == cookieName) {
+                return cookieSplit[1];
+            }
+        }
+    }
+}
+
 
 
 },{"./templates/autocomplete.hbs":22,"./templates/post.hbs":23,"hbsfy/runtime":20}],22:[function(require,module,exports){

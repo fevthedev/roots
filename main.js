@@ -58,6 +58,7 @@ var hbs = exphbs.create
         {
             return "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;";
         },
+        // Handlebars switch statement, see
         // http://chrismontrois.net/2016/01/30/handlebars-switch/
         switch : function(value, options)
         {
@@ -71,6 +72,7 @@ var hbs = exphbs.create
             if (value == this._switch_value_)
                 return options.fn(this);
         },
+        // Handlebars comparison helper, for equality, inequality, less than, gt, etc. see
         // http://doginthehat.com.au/2012/02/comparison-block-helper-for-handlebars-templates/#comment-44
         compare: function (lvalue, operator, rvalue, options)
         {
@@ -111,6 +113,7 @@ var hbs = exphbs.create
             if (result) {return options.fn(this);}
             else        {return options.inverse(this);}
         },
+        // convert unix timestamp to datetime string
         time : function(value, options)
         {
             var a = (new Date(value) + "").split(" ");
@@ -118,14 +121,16 @@ var hbs = exphbs.create
             return a[0] + ", " + a[1] + " " + a[2] + ", " +  a[3] + " at " + ((t[0]==0)?12:t[0]%12) + ":" + t[1] + " " + ((t[0]/12)?"pm":"am");
         }
     },
-    defaultLayout: 'main',
-    extname: '.hbs',
+    defaultLayout: 'main', // sets which layout will be used by default, in our case it's main.hbs
+    extname: '.hbs', // retain some sanity by keeping the file extensions short on our Handlebars templates
     partialsDir: ['views/partials/']
 });
 
 // main app object
 var app = express();
 
+// tell express that when we say something like 'res.render("page", data);' we mean
+// compile 'page.hbs' with 'data' and send it back.
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.use(express.static(__dirname + "/resources")); // all resources in resources folder

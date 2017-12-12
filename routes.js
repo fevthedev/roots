@@ -23,7 +23,7 @@ module.exports = function(app, db)
     // Separate route for help page
     app.get('/help', function(req, res)
     {
-        return res.status(200).sendfile("UserTutorial.htm");
+        return res.status(200).sendfile("roots-user-guide.pdf");
     });
 };
 

@@ -1,7 +1,7 @@
 //api.js
 
 // This file is the guts of the application server.
-// The client send ajax requests here, and we operate on the database and/or
+// The client sends ajax requests here, and we operate on the database and/or
 // send data back to the client.
 
 var as = require('async');
@@ -94,7 +94,7 @@ module.exports = function(app, db)
                 });
             }
         ],
-        function(err)
+        function(err) // this callback is only fired on error, so assume there is one
         {
             console.error(err);
             return res.status(500).send("Error creating your account");

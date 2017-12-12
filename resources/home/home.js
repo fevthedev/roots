@@ -55,7 +55,6 @@ $(function() {
     $("#profileTabPhotos").click(showGallery);
     $("#profileTabEvents").click(showEvents);
     $("#profileTabMail").click(showMessages);
-    $("#changeProfilePicBtn").click(profilePic);
     $("#mailCancelBtn").click(resetMail);
     $("#mailNameSearchBox").on('keyup', mailAutoComplete);
 });
@@ -205,11 +204,9 @@ function userLogin(){
             success: function (response) {
                 if (response) {
                     var obj = JSON.parse(response);
-                    console.log(response);
-                    console.log(obj);
 
 					if (obj.error) {
-                        console.log(obj.error);
+                        alert(obj.error);
 						$("#loginFormAlert").removeClass("hidden");
 						$("#loginFormAlert").removeClass("alert-success");
 						$("#loginFormAlert").addClass("alert-warning");
@@ -234,13 +231,16 @@ function logout()
     });
 }
 
+// Create new user: gether and validate form data, send it to the server, react accordingly
 function userRegistration() {
 
+    // get the fields
     var fullName = $("#userFullName").val();
     var userName = $("#userName").val();
     var password = $("#userPassword").val();
     var confirmPass = $("#userPasswordConfirm").val();
 
+    // check them for non-emptiness (and that the passwords match)
     if (fullName.trim() === "") {
 		$("#signupFormAlert").html("<strong>Missing information: </strong>Please enter your name.");
 		$("#signupFormAlert").removeClass("hidden-xs-up");
@@ -272,6 +272,7 @@ function userRegistration() {
         return false;
     }
 
+    // gather the form data into an object to send to the server
     var formData = $("#signupForm").serialize();
 
 	$("#signupFormAlert").addClass("hidden-xs-up");
@@ -294,6 +295,7 @@ function userRegistration() {
 
 }
 
+// select the news feed
 function showActivity(label) {
 
     $(".tabLabel").css({
@@ -312,40 +314,7 @@ function showActivity(label) {
 
 }
 
-function showGallery(label) {
-
-    $(".tabLabel").css({
-        "background-color": "#ffffff",
-        "color": "#000000"
-    });
-
-    $(label).css({
-        "background-color": "#81e5bc",
-        "color": "#ffffff"
-    });
-
-    $(".contentItem").fadeOut("slow").attr("hidden", true);
-    $("#profilePhotosContent").fadeIn("slow").attr("hidden", false);
-
-}
-
-function showEvents(label) {
-
-    $(".tabLabel").css({
-        "background-color": "#ffffff",
-        "color": "#000000"
-    });
-
-    $(label).css({
-        "background-color": "#81e5bc",
-        "color": "#ffffff"
-    });
-
-    $(".contentItem").fadeOut("slow").attr("hidden", true);
-    $("#profileEventContent").attr("hidden", false).fadeIn("slow");
-
-}
-
+// show messages
 function showMessages(label) {
 
     $(".tabLabel").css({
@@ -363,6 +332,7 @@ function showMessages(label) {
 
 }
 
+// popup on account creation
 function showSuccessPrompt() {
 
     $("#signupForm").fadeOut("slow", function() {
@@ -372,7 +342,7 @@ function showSuccessPrompt() {
     });
 }
 
-
+// gets the user's preferred font size
 function checkFontSize() {
 
     $.ajax({
@@ -407,6 +377,7 @@ function checkFontSize() {
     });
 }
 
+// sets the user's preferred font size
 function setFontSize(size) {
 
     $.ajax({
@@ -420,7 +391,4 @@ function setFontSize(size) {
         }
     });
 }
-
-
-
 

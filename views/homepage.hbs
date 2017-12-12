@@ -1,0 +1,185 @@
+<div class="container">
+    <div class="row">
+        <div class="col py-3 mb-3" id="header">
+
+            <div class="row align-items-center">
+
+                <div class="col-12 col-md-5">
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            <img src="images/logo.png" alt="roots logo" class="img-fluid" id="siteLogo">
+                        </div>
+
+                        <div class="col-9 col-sm-7">
+                            <h3>Roots</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3">
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <strong>Font too small? Click here.</strong>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#" id="font125">125%</a>
+                            <a class="dropdown-item" href="#" id="font150">150%</a>
+                            <a class="dropdown-item" href="#" id="font175">175%</a>
+                            <a class="dropdown-item" href="#" id="font200">200%</a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-12 col-md-2">
+                    <a href="/help" class="btn btn-secondary">Help</a>
+                </div>
+
+                <div class="col-12 col-md-2">
+                    <button class="btn btn-success btn-block" id="signoutBtn">Sign Out</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col py-3">
+
+            <div class="row">
+
+                <div class="col-12 col-md-4" id="profileHeader">
+                    <div class="col py-3">
+                        <h3 id="profileNameDisplay">{{user.name}}</h3>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-8">
+
+                    <div class="row">
+                        <div class="col-12" id="updateStatusWindow">
+                            <form>
+                                <div class="form-group">
+                                    <textarea class="form-control" id="statusEntryField" rows="3" placeholder="Share something great..."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-success" id="postStatusBtn">Post</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <ul class="my-0" id="profileTabs">
+                                <!-- Feed / Mail -->
+                                <li class="tabLabel text-muted" id="profileTabActivity">News Feed</li>
+                                <li class="tabLabel text-muted" id="profileTabMail">Mail</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-12 px-3" id="profileContent">
+
+                        <!-- Feed -->
+                        <div class="row contentItem" id="profileActivityContent">
+                            <div id="feed" class="col-12"></div>
+                        </div>
+
+                        <!-- Mail -->
+                        <div class="row contentItem" id="profileMailContent" hidden>
+                            <div class="col-12">
+                                <button class="btn btn-roots float-right" style="margin-top:10px" data-toggle="modal" data-target="#sendMail">New Message</button>
+                                <h3 class="my-3">Your Mail</h3>
+                                <ul id="messageList">
+                                    {{#each user.mail}}
+                                        <li id="mailLi_{{this.id}}" class="messageItem">
+                                            <img src="/images/mail.png" id="mailIcon" />
+                                            <span>From <strong>{{this.sender.name}}</strong></span>
+                                            <button class="btn btn-roots float-right" data-toggle="modal" data-target="#mailItem_{{this.id}}">Read Message</button>
+                                            <p>received {{time this.timestamp}}</p>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- mail Modal -->
+        {{#each  user.mail}}
+            <div class="modal fade" id="mailItem_{{this.id}}" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel_{{this.sender.name}}"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="mailModalLabel_{{this.sender.name}}">{{this.sender.name}}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="mailReplyForm_{{this.id}}">
+                                <div class="form-group">
+                                    <p class="text-muted">{{this.message}}</p>
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="mailReplyMessage_{{this.id}}" class="form-control" rows="3" placeholder="Type your response here..." style="resize: none;"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="mailDismiss_{{this.id}}" class="btn btn-secondary dismiss-btn" data-dismiss="modal">Dismiss</button>
+                            <button type="button" id="mailReply_{{this.id}}_{{this.sender.id}}" class="btn btn-success reply-btn"  data-dismiss="modal">Reply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+
+        <!-- Send mail Modal -->
+        <div class="modal fade" id="sendMail" tabindex="-1" role="dialog" aria-labelledby="sendMailLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="sendMailLabel">Send a message to someone</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="mailForm">
+                            <div id="mailTopHalf" class="form-group">
+                                <input type="text" id="mailNameSearchBox" placeholder="Type a name here..."></input>
+                                <div id="mailSearchResults"></div>
+                            </div>
+                            <div id="mailRecipientName" class="form-group" hidden></div>
+                            <div class="form-group">
+                                <textarea id="mailMessageBox" class="form-control" rows="3" placeholder="Type your message here..." style="resize: none;"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="mailCancelBtn" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="mailSendBtn" class="btn btn-success" data-dismiss="modal" hidden>Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <footer class="col-12 mt-5 py-2">
+            <p class="text-center m-0">Roots 2017 &copy;&nbsp;All rights reserved.</p>
+        </footer>
+    </div>
+</div>
+

@@ -1,0 +1,171 @@
+body {
+    background-color: #ffffff;
+    font-size: 1.25rem;
+}
+
+.font-rg {
+    font-size: 1.25rem !important;
+}
+
+.font-lg {
+    font-size: 1.5rem !important;
+}
+
+.font-xl {
+    font-size: 1.75rem !important;
+}
+
+.font-xxl {
+    font-size: 2.0rem !important;
+}
+
+
+.btn-roots {
+    border: 1px solid #abefd4;
+    background-color: #81e5bc;
+    color: #666666;
+}
+
+#header {
+    background-color: #ffffff;
+}
+
+#headerProfilePhoto {
+    border: 2px solid #81e5bc;
+}
+
+#mainFeed {
+    background-color: #abefd4;
+}
+
+#sideBarOptions {
+    background-color: #abefd4;
+}
+
+#feedList {
+    background-color: #ffffff;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+.feedStatus {
+    font-size: 0.9em;
+}
+
+.feedItem {
+    cursor: pointer;
+    border: 2px solid #ccc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+}
+
+.feedItem p, .feedItem ul {
+    margin-bottom: 0;
+}
+
+.feedOptions {
+    font-size: 70%;
+    margin-right: 15px;
+}
+
+.list-inline-item:not(:last-child) {
+    margin-right: 15px;
+}
+
+footer {
+    background-color: #81e5bc;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#profileNameDisplay {
+    font-size: 1em;
+    letter-spacing: 2px;
+}
+
+#profileStatusDisplay {
+    text-transform: capitalize;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+ul#profileTabs {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul#profileTabs li:first-child {
+    background-color: #81e5bc;
+    color: #ffffff;
+}
+
+ul#profileTabs li {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #81e5bc;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+}
+
+#profileContent ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#profileContent {
+    border: 2px solid #81e5bc;
+    min-height: 300px;
+}
+
+#profileContent .eventNameContent {
+    width: 70%;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+#profileContent .eventInterestNotice {
+    width: 100%;
+    font-size: 0.9em;
+}
+
+#profileContent .eventListItem {
+    border: 2px solid #ccc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#profileContent .interestCount {
+    font-size: 0.9em;
+}
+
+#profileContent #galleryList li {
+    padding: 0;
+    margin: 0;
+}
+
+#statusEntryField {
+    resize: none;
+    font-size: 1.2em;
+    border: 2px solid #81e5bc;
+}
+
+.messageItem {
+    padding: 10px;
+    border: 1px solid #81e5bc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.messageItem p {
+    margin-bottom: 0px;
+    margin-left: 15px;
+    font-size: 0.9em;
+    color: #AAA;
+}

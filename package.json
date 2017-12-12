@@ -1,0 +1,40 @@
+{
+  "name": "roots",
+  "version": "0.0.1",
+  "private": true,
+  "description": "TBD",
+  "main": "main.js",
+  "dependencies": {
+    "async": "^2.5.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.1",
+    "client-sessions": "^0.8.0",
+    "express": "^3.21.2",
+    "express-handlebars": "^3.0.0",
+    "fs": "0.0.1-security",
+    "mongodb": "^2.2.33"
+  },
+  "devDependencies": {
+    "nodemon": "*",
+    "forever": "*",
+    "hbsfy": "*"
+  },
+  "scripts": {
+    "test": "nodemon --inspect main.js",
+    "start": "forever -w --watchDir . start main.js"
+  },
+  "contributors": [
+    {
+      "name": "Jonathan MacKenzie"
+    },
+    {
+      "name": "Bradley Baker"
+    },
+    {
+      "name": "Chris Fevrier"
+    },
+    {
+      "name": "Mark Podrouzek"
+    }
+  ]
+}
